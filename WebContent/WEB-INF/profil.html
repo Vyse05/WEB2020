@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="">
+
+<script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/profil.js"></script>
+
+<title>WebProj</title>
+</head>
+<body>
+<div id='header'></div><br/>
+<div id='sadrzaj'>
+	<h1>Profil korisnika</h1>
+	<form id="forma">
+		<span>Korisničko ime</span><br/>
+		<input type="text" placeholder="Korisničko ime" id="username" readonly disabled>
+		<br/><br/>
+		
+		<span>Ime</span><br/>
+		<input type="text" placeholder="Ime" id="ime">
+		<span id="errorIme" hidden="true">Niste uneli ime.</span>	
+		<br/><br/>
+		
+		<span>Prezime</span><br/>
+		<input type="text" placeholder="Prezime" id="prezime">
+		<span id="errorPrezime" hidden="true">Niste uneli prezime.</span>	
+		<br/><br/>
+				
+		<span>Pol</span><br/>
+		<input type="text" placeholder="Pol" id="pol">
+		<span id="errorPol" hidden="true">Niste uneli pol.</span>
+		<br/><br/>
+		
+		<span>Stara lozinka</span><br/>
+		<input type="password" placeholder="Stara lozinka" id="oldPassword">
+		<span id="errorOldPassword" hidden="true">Niste uneli staru lozinku.</span>
+		<br/><br/>
+		
+		<span>Lozinka</span><br/>
+		<input type="password" placeholder="Lozinka" id="password1">
+		<span id="errorPassword1" hidden="true">Niste uneli novu lozinku.</span>
+		<br/><br/>
+		
+		<span>Ponovljena lozinka</span><br/>
+		<input type="password" placeholder="Ponovite novu lozinku" id="password2">
+		<span id="errorPassword2" hidden="true">Niste ponovili novu lozinku.</span>
+		<span id="errorPasswordMatch" hidden="true">Lozinke nisu iste.</span>
+		<br/><br/>
+		
+		<span id="snimljeno" hidden="true">Snimljeno</span>
+		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
+		<input type="submit" value="Registruj se">
+	</form>
+</div>
+</body>
+</html>

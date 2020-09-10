@@ -10,7 +10,8 @@ $(window).on('load', function(){
 		type : 'GET',
 		url : '/WebProj/rest/korisnik/info',
 		dataType : "json",
-		success : function(data) {
+		success : function(data) {		
+			$('#korisnicki').append('<a onclick="logout()" href="#">Log out</a>&nbsp;&nbsp;');
 			$('#korisnicki').append('<a href="/WebProj/rest/korisnik/profil">Profil</a>&nbsp;&nbsp;');
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -23,3 +24,16 @@ $(window).on('load', function(){
 			}
 		});
 });
+
+function logout(){
+	$.ajax({
+		type : 'POST',
+		url : '/WebProj/rest/korisnik/logout',
+		success : function() {
+			window.location.href = "/WebProj/index.html";
+		},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+			window.location.href = "/WebProj/index.html";
+		}
+	});	  
+  }
