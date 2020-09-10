@@ -13,6 +13,9 @@ $(window).on('load', function(){
 		success : function(data) {		
 			$('#korisnicki').append('<a onclick="logout()" href="#">Log out</a>&nbsp;&nbsp;');
 			$('#korisnicki').append('<a href="/WebProj/rest/korisnik/profil">Profil</a>&nbsp;&nbsp;');
+			if(data.uloga == 'Domaćin'){
+				$('#korisnicki').append('<a href="/WebProj/rest/apartman/nov">Nov Apartman</a>&nbsp;&nbsp;');				
+			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			if(XMLHttpRequest.status==403)

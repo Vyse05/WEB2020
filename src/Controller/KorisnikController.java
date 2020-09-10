@@ -1,6 +1,8 @@
 package Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -195,5 +197,23 @@ public class KorisnikController {
 			}
 		}
 		return null;
+	}
+	
+	@GET
+	@Path("/svi")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getKorisnici() {
+		DAL<Korisnik> korisnici = korisnici(application);		
+		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
+		
+		for(Korisnik korisnik : korisnici.get()) {
+			if(korisnik.getRemoved()) {
+				continue;
+			}
+			
+			response.add(new UserInfoResponse(korisnik));
+		}
+		
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 }
