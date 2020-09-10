@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="">
+
+<script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/apartman.js"></script>
+
+<title>WebProj</title>
+</head>
+<body>
+<div id='header'></div><br/>
+<div id='sadrzaj'>
+	<h1>Apartman</h1>
+	<form id="forma">
+		<input type="hidden" id="canEdit">
+		<input type="hidden" id="domacinId">
+		<span>Domacin</span><br/>
+		<input type="text" id="domacin" readonly disabled>
+		
+		<br/><br/>
+		
+		<span>Tip</span><br/>
+		<input type="text" placeholder="Tip" id="tip" disabled=canEdit()>
+		<span id="errorTip" hidden="true">Niste uneli tip.</span>
+		
+		<br/><br/>
+		
+		<span>Geografska širina</span><br/>
+		<input type="number" placeholder="Geografska širina" id="geografskaSirina" disabled=canEdit()>
+		<span id="errorGeografskaSirina" hidden="true">Niste uneli geografsku širinu.</span>
+		
+		<br/><br/>
+		
+		<span>Geografska dužina</span><br/>
+		<input type="number" placeholder="Geografska dužina" id="geografskaDuzina" disabled=canEdit()>
+		<span id="errorGeografskaDuzina" hidden="true">Niste uneli geografsku dužinu.</span>
+		
+		<br/><br/>
+		
+		<span>Ulica</span><br/>
+		<input type="text" placeholder="Ulica" id="ulica" disabled=canEdit()>
+		<span id="errorUlica" hidden="true">Niste uneli ulicu.</span>
+		<br/><br/>
+				
+		<span>Broj</span><br/>
+		<input type="text" placeholder="Broj" id="broj" disabled=canEdit()>
+		<span id="errorBroj" hidden="true">Niste uneli broj.</span>
+		<br/><br/>
+		
+		<span>Naseljeno mesto</span><br/>
+		<input type="text" placeholder="Naseljeno mesto" id="naseljenoMesto" disabled=canEdit()>
+		<span id="errorNaseljenoMesto" hidden="true">Niste uneli naseljeno mesto.</span>
+		<br/><br/>
+		
+		<span>Poštanski broj</span><br/>
+		<input type="text" placeholder="Poštanski broj" id="postanskiBroj" disabled=canEdit()>
+		<span id="errorPostanskiBroj" hidden="true">Niste uneli poštanski broj.</span>
+		<br/><br/>
+		
+		<span>Broj soba</span><br/>
+		<input type="number" placeholder="Broj soba" id="brojSoba" disabled=canEdit()>
+		<span id="errorBrojSoba" hidden="true">Niste uneli broj soba.</span>
+		<br/><br/>
+		
+		<span>Broj gostiju</span><br/>
+		<input type="number" placeholder="Broj gostiju" id="brojGostiju" disabled=canEdit()>
+		<span id="errorBrojGostiju" hidden="true">Niste uneli broj gostiju.</span>
+		<br/><br/>
+		
+		<span>Cena</span><br/>
+		<input type="number" placeholder="Cena" id="cena" disabled=canEdit()>
+		<span id="errorCena" hidden="true">Niste uneli cenu.</span>
+		<br/><br/>
+		
+		<span>Vreme za prijavu</span><br/>
+		<input type="number" placeholder="Vreme za prijavu" id="vremeZaPrijavu" disabled=canEdit()>
+		<span id="errorVremeZaPrijavu" hidden="true">Niste uneli vreme za prijavu.</span>
+		<br/><br/>
+		
+		<span>Vreme za odjavu</span><br/>
+		<input type="number" placeholder="Vreme za odjavu" id="vremeZaOdjavu" disabled=canEdit()>
+		<span id="errorVremeZaOdjavu" hidden="true">Niste uneli vreme za odjavu.</span>
+		<br/><br/>
+
+		<span id="snimljeno" hidden="true">Snimljeno</span>
+		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
+		<input type="submit" value="OK" hidden=canEdit()>
+	</form>
+</div>
+</body>
+</html>
