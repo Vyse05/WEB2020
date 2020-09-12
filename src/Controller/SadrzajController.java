@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import Model.Apartman;
 import Model.Sadrzaj;
 import Util.DAL;
 import ViewModel.SadrzajRequest;
@@ -33,7 +34,7 @@ public class SadrzajController {
 		@SuppressWarnings("unchecked")
 		DAL<Sadrzaj> sadrzaji = (DAL<Sadrzaj>) application.getAttribute("sadrzaji");
 		if (sadrzaji == null) {
-			sadrzaji = new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath(""));
+			sadrzaji = new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath("") + "/sadrzaji.txt");
 			application.setAttribute("sadrzaji", sadrzaji);
 		}
 

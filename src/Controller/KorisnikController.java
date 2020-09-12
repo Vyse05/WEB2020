@@ -1,6 +1,9 @@
 package Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import Admin.Administratori;
 import Model.Korisnik;
 import Util.DAL;
 import ViewModel.LoginRequest;
@@ -36,11 +40,21 @@ public class KorisnikController {
 		@SuppressWarnings("unchecked")
 		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
 		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath(""));
+			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "/korisnici.txt");
 			application.setAttribute("korisnici", korisnici);
 		}
 
 		return korisnici;
+	}
+
+	private List<Korisnik> administratori(ServletContext application) {
+		@SuppressWarnings("unchecked")
+		List<Korisnik> administratori = (List<Korisnik>) application.getAttribute("administratori");
+		if (administratori == null) {
+			administratori = Administratori.get(application);
+		}
+
+		return administratori;
 	}
 
 	@GET
@@ -198,22 +212,40 @@ public class KorisnikController {
 		}
 		return null;
 	}
-	
+
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getKorisnici() {
-		DAL<Korisnik> korisnici = korisnici(application);		
+		DAL<Korisnik> korisnici = korisnici(application);
 		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
-		
-		for(Korisnik korisnik : korisnici.get()) {
-			if(korisnik.getRemoved()) {
+
+		for (Korisnik korisnik : korisnici.get()) {
+			if (korisnik.getRemoved()) {
 				continue;
 			}
-			
+
 			response.add(new UserInfoResponse(korisnik));
 		}
-		
+
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	@Path("/administratori")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAdministratori() {
+		List<Korisnik> administratori = administratori(application);
+		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
+
+		for (Korisnik korisnik : administratori) {
+			if (korisnik.getRemoved()) {
+				continue;
+			}
+
+			response.add(new UserInfoResponse(korisnik));
+		}
+
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 }

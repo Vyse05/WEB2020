@@ -18,9 +18,9 @@ public class DAL<T extends Removable> {
 
 	final Class<T> typeParameterClass;
 
-	public DAL(Class<T> typeParameterClass, String globalPath) {
+	public DAL(Class<T> typeParameterClass, String path) {
 		this.typeParameterClass = typeParameterClass;
-		path = globalPath + "/" + typeParameterClass.getName() + ".txt";
+		this.path = path;
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
@@ -47,9 +47,9 @@ public class DAL<T extends Removable> {
 				if (line.equals(""))
 					continue;
 
-				T novaLokacija = typeParameterClass.getConstructor(Integer.class, String.class).newInstance(id, line);
+				T novEntitet = typeParameterClass.getConstructor(Integer.class, String.class).newInstance(id, line);
 
-				entities.add(novaLokacija);
+				entities.add(novEntitet);
 				id++;
 			}
 		} catch (Exception ex) {
@@ -71,7 +71,7 @@ public class DAL<T extends Removable> {
 		entity.setRemoved(true);
 		refresh();
 	}
-	
+
 	private void write(T entity) {
 		PrintWriter out = null;
 		try {
