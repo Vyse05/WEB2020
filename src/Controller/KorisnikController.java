@@ -1,9 +1,6 @@
 package Controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +15,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import Admin.Administratori;
 import Model.Korisnik;
 import Util.DAL;
+import ViewModel.ErrorResponse;
 import ViewModel.LoginRequest;
 import ViewModel.RegisterRequest;
 import ViewModel.UserInfoRequest;
@@ -129,6 +128,7 @@ public class KorisnikController {
 	@POST
 	@Path("/info")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response izmeniInfo(UserInfoRequest request) {
 
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
@@ -141,12 +141,16 @@ public class KorisnikController {
 			}
 		}
 
+		DAL<Korisnik> korisnici = korisnici(application);
+		Korisnik snimljeniKorisnik = korisnik(korisnici.get(), korisnik.getKorisnickoIme());
+		if (snimljeniKorisnik == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Korisnik ne postoji ili izmena nije moguća.")).build();
+		}
+		
 		if (!request.getStaraLozinka().equals(korisnik.getLozinka())) {
 			return Response.status(403).build();
 		}
 
-		DAL<Korisnik> korisnici = korisnici(application);
-		Korisnik snimljeniKorisnik = korisnik(korisnici, korisnik.getKorisnickoIme());
 		snimljeniKorisnik.setIme(request.getIme());
 		snimljeniKorisnik.setPrezime(request.getPrezime());
 		snimljeniKorisnik.setPol(request.getPol());
@@ -162,7 +166,7 @@ public class KorisnikController {
 
 		DAL<Korisnik> korisnici = korisnici(application);
 
-		if (korisnik(korisnici, k.getKorisnickoIme()) == null) {
+		if (korisnik(korisnici.get(), k.getKorisnickoIme()) == null) {
 			Korisnik noviKorisnik = new Korisnik(k.getKorisnickoIme(), k.getLozinka(), k.getIme(), k.getPrezime(),
 					k.getPol(), "Korisnik", false);
 
@@ -184,8 +188,13 @@ public class KorisnikController {
 		String lozinka = logovaniKorisnik.getLozinka();
 
 		DAL<Korisnik> korisnici = korisnici(application);
+		List<Korisnik> administratori = administratori(application);
 
-		Korisnik korisnik = korisnik(korisnici, korisnickoIme);
+		Korisnik korisnik = korisnik(korisnici.get(), korisnickoIme);
+
+		if (korisnik == null) {
+			korisnik = korisnik(administratori, korisnickoIme);
+		}
 
 		if (korisnik != null && korisnik.getLozinka().equals(lozinka)) {
 			servletRequest.getSession().setAttribute("korisnik", korisnik);
@@ -204,15 +213,6 @@ public class KorisnikController {
 		servletRequest.getSession().invalidate();
 	}
 
-	private Korisnik korisnik(DAL<Korisnik> korisnici, String korisnickoIme) {
-		for (Korisnik korisnik : korisnici.get()) {
-			if (korisnik.getKorisnickoIme().equals(korisnickoIme)) {
-				return korisnik;
-			}
-		}
-		return null;
-	}
-
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -229,5 +229,14 @@ public class KorisnikController {
 		}
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
+	
+	private Korisnik korisnik(List<Korisnik> korisnici, String korisnickoIme) {
+		for (Korisnik korisnik : korisnici) {
+			if (korisnik.getKorisnickoIme().equals(korisnickoIme)) {
+				return korisnik;
+			}
+		}
+		return null;
 	}
 }

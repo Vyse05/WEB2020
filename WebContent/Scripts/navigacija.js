@@ -16,7 +16,7 @@ $(window).on('load', function(){
 			if(data.uloga == 'Domaćin'){
 				$('#korisnicki').append('<a href="/WebProj/rest/apartman/nov">Nov Apartman</a>&nbsp;&nbsp;');				
 			}
-			if(data.uloga == 'Korisnik'){
+			if(data.uloga == 'Administrator'){
 				$('#korisnicki').append('<a href="/WebProj/rest/sadrzaj/nov">Nov Sadrzaj</a>&nbsp;&nbsp;');				
 			}
 		},

@@ -9,6 +9,9 @@ $(window).on('load', function(){
 			$("#prezime").val(data.prezime);
 			$("#username").val(data.korisnickoIme);
 			$("#pol").val(data.pol);
+			if(data.uloga == 'Administrator'){
+				$("#canEdit").val(false);		
+			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			//TODO
@@ -28,7 +31,6 @@ $(document).on('submit','#forma',function(e){
 	$("#errorPasswordMatch").hide();
 	
 	e.preventDefault();
-	console.log("registracija");
 	var ime = $("#ime").val();
 	var prezime = $("#prezime").val();
 	var oldPassword = $("#oldPassword").val();
@@ -46,7 +48,7 @@ $(document).on('submit','#forma',function(e){
 	} else if (pol == "") {
 		$("#errorPol").show();
 	}else if (oldPassword == "") {
-		$("#errorOldPawword").show();
+		$("#errorOldPassword").show();
 	}else if (password1 == "") {
 		$("#errorPassword1").show();
 	}  else if (password2 == "") {
@@ -63,8 +65,9 @@ $(document).on('submit','#forma',function(e){
 			success : function() {
 				$("#snimljeno").show();
 			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
+			error : function(xhr, status) {
 				$("#errorSnimljeno").show();
+				$("#errorSnimljeno").text("Nije snimljeno: "+$.parseJSON(xhr.responseText).error);
 			}
 		});		
 	}
@@ -79,4 +82,8 @@ function formToJSON(ime, prezime, pol, staraLozinka, novaLozinka) {
 		"prezime" : prezime,
 		"pol" : pol
 	});
+}
+
+function canEdit(){ 
+	return $("#canEdit").val();
 }
