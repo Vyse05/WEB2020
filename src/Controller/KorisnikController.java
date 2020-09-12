@@ -230,22 +230,4 @@ public class KorisnikController {
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
-
-	@GET
-	@Path("/administratori")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAdministratori() {
-		List<Korisnik> administratori = administratori(application);
-		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
-
-		for (Korisnik korisnik : administratori) {
-			if (korisnik.getRemoved()) {
-				continue;
-			}
-
-			response.add(new UserInfoResponse(korisnik));
-		}
-
-		return Response.ok(response, MediaType.APPLICATION_JSON).build();
-	}
 }

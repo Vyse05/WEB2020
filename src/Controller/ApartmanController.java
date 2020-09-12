@@ -48,7 +48,7 @@ public class ApartmanController {
 		@SuppressWarnings("unchecked")
 		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
 		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
+			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "/korisnici.txt");
 			application.setAttribute("korisnici", korisnici);
 		}
 
@@ -132,5 +132,29 @@ public class ApartmanController {
 
 		apartmani.refresh();
 		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("/svi")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getApartmani() {
+		List<ApartmanResponse> response = new ArrayList<>();
+
+		DAL<Apartman> apartmani = apartmani(application);
+		DAL<Korisnik> korisnici = korisnici(application);
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		
+		for(Apartman apartman:apartmani.get()) {
+			if(apartman.getRemoved()) {
+				continue;
+			}
+			
+			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
+			Boolean canEdit = korisnik!=null && korisnik.getId() == domacin.getId();
+			ApartmanResponse apartmanResponse = new ApartmanResponse(apartman, domacin, canEdit);
+			response.add(apartmanResponse);			
+		}
+		
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 }
