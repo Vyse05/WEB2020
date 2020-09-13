@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="">
-
+<link rel="stylesheet" href="/WEB-INF/myStyle.css">
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/login.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
 <title>WebProj</title>
 </head>
 <body>
 <div id='header'></div><br/>
+		<div class="container">
+
 <div id='sadrzaj'>
 	<h1>Log in</h1>
 	<form id="forma">
-		<span>Korisničko ime</span><br/>
-		<input type="text" placeholder="Korisničko ime" id="username">
-		<span class="error" id="errorUsername" hidden="true">Niste uneli korisničko ime.</span>
+		<label>Korisničko ime</label><br/>
+		<input class="form-control" type="text" placeholder="Korisničko ime" id="username">
+		<label class="error" id="errorUsername" hidden="true">Niste uneli korisničko ime.</label>
 		
 		<br/><br/>
 		
@@ -30,6 +35,7 @@
 		
 		<input type="submit" value="Log in">
 	</form>
+</div>
 </div>
 </body>
 </html>
