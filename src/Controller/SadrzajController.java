@@ -33,7 +33,7 @@ public class SadrzajController {
 		@SuppressWarnings("unchecked")
 		DAL<Sadrzaj> sadrzaji = (DAL<Sadrzaj>) application.getAttribute("sadrzaji");
 		if (sadrzaji == null) {
-			sadrzaji = new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath("") + "/sadrzaji.txt");
+			sadrzaji = new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath("") + "sadrzaji.txt");
 			application.setAttribute("sadrzaji", sadrzaji);
 		}
 

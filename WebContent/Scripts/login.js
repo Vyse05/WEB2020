@@ -1,3 +1,15 @@
+$(window).on('load', function(){
+	$.ajax({
+		type : 'GET',
+		url : '/WebProj/rest/korisnik/info',
+		dataType : "json",
+		success : function(data) { // Vec Ulogovan
+			window.location.href = "/WebProj/index.html";
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {}
+		});
+});
+
 $(document).on('submit','#forma',function(e){
 	$("#errorUsername").hide();
 	$("#errorPassword").hide();

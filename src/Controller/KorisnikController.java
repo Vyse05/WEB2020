@@ -39,7 +39,7 @@ public class KorisnikController {
 		@SuppressWarnings("unchecked")
 		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
 		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "/korisnici.txt");
+			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
 			application.setAttribute("korisnici", korisnici);
 		}
 

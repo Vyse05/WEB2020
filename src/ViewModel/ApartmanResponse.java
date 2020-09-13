@@ -21,12 +21,12 @@ public class ApartmanResponse {
 	private Integer vremeZaOdjavu;
 	private Boolean canEdit;
 
-	public ApartmanResponse(Apartman apartman, Korisnik korisnik, Boolean canEdit) {
+	public ApartmanResponse(Apartman apartman, Korisnik domacin, Boolean canEdit) {
 		super();
 		this.tip = apartman.getTip();
 		this.id = apartman.getId();
-		this.domacin = korisnik.getIme() + " " + korisnik.getPrezime();
-		this.domacinId = korisnik.getId();
+		this.domacin = domacin.getIme() + " " + domacin.getPrezime();
+		this.domacinId = domacin.getId();
 		this.geografskaSirina = apartman.getGeografskaSirina();
 		this.geografskaDuzina = apartman.getGeografskaDuzina();
 		this.ulica = apartman.getUlica();

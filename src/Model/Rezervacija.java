@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import Util.Removable;
+import ViewModel.RezervacijaRequest;
 
 public class Rezervacija extends Removable {
 	private Integer apartmanId;
@@ -29,9 +30,23 @@ public class Rezervacija extends Removable {
 		poruka = tokenizer.nextToken().trim();
 		gostId = Integer.parseInt(tokenizer.nextToken().trim());
 		status = tokenizer.nextToken().trim();
-		komentar = tokenizer.nextToken().trim();
-		ocena = Integer.parseInt(tokenizer.nextToken().trim());
+		komentar = tokenizer.nextToken().trim().equals("null")? null : tokenizer.nextToken().trim();
+		ocena = tokenizer.nextToken().trim().equals("null")? null : Integer.parseInt(tokenizer.nextToken().trim());
 		prikazatiKomentar = tokenizer.nextToken().trim().equals("true");
+	}
+
+	public Rezervacija(RezervacijaRequest request, Apartman apartman, Korisnik korisnik) {
+		this.apartmanId = request.getApartmanId();
+		this.pocetniDatumRezervacije = request.getPocetniDatumRezervacije();
+		this.brojNocenja = request.getBrojNocenja();
+		this.ukupnaCena = request.getBrojNocenja()*apartman.getCena();
+		this.poruka = request.getPoruka();
+		this.gostId = korisnik.getId();
+		this.status = "Kreirana";
+		this.komentar = null;
+		this.ocena = null;
+		this.prikazatiKomentar = null;
+		setRemoved(false);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class ApartmanController {
 		@SuppressWarnings("unchecked")
 		DAL<Apartman> apartmani = (DAL<Apartman>) application.getAttribute("apartmani");
 		if (apartmani == null) {
-			apartmani = new DAL<Apartman>(Apartman.class, application.getRealPath("") + "/apartmani.txt");
+			apartmani = new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
 			application.setAttribute("apartmani", apartmani);
 		}
 
@@ -48,7 +48,7 @@ public class ApartmanController {
 		@SuppressWarnings("unchecked")
 		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
 		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "/korisnici.txt");
+			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
 			application.setAttribute("korisnici", korisnici);
 		}
 

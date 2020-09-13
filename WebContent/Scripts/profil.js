@@ -1,5 +1,5 @@
 $(window).on('load', function(){
-	
+	$("#canEdit").val(true);
 	$.ajax({
 		type : 'GET',
 		url : '/WebProj/rest/korisnik/info',
@@ -10,7 +10,14 @@ $(window).on('load', function(){
 			$("#username").val(data.korisnickoIme);
 			$("#pol").val(data.pol);
 			if(data.uloga == 'Administrator'){
-				$("#canEdit").val(false);		
+				$("#ime").prop( "disabled", true );
+				$("#prezime").prop( "disabled", true );
+				$("#oldPassword").prop( "disabled", true );
+				$("#password1").prop( "disabled", true );
+				$("#password2").prop( "disabled", true );
+				$("#username").prop( "disabled", true );
+				$("#pol").prop( "disabled", true );	
+				$("#submit").prop( "hidden", true );	
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

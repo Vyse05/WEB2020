@@ -22,17 +22,30 @@ $(window).on('load', function(){
 			$("#vremeZaOdjavu").val(data.vremeZaOdjavu);
 			$("#domacin").val(data.domacin);
 			$("#domacinId").val(data.domacinId);
-			$("#canEdit").val(data.canEdit);
+			
+			if(!data.canEdit){
+				$("#tip").prop( "disabled", true );
+				$("#geografskaSirina").prop( "disabled", true );
+				$("#geografskaDuzina").prop( "disabled", true );
+				$("#ulica").prop( "disabled", true );
+				$("#broj").prop( "disabled", true );
+				$("#naseljenoMesto").prop( "disabled", true );
+				$("#postanskiBroj").prop( "disabled", true );
+				$("#brojSoba").prop( "disabled", true );
+				$("#brojGostiju").prop( "disabled", true );
+				$("#cena").prop( "disabled", true );
+				$("#vremeZaPrijavu").prop( "disabled", true );
+				$("#vremeZaOdjavu").prop( "disabled", true );
+				$("#domacin").prop( "disabled", true );
+				$("#domacinId").prop( "disabled", true );
+				$("#submit").prop( "hidden", true );
+			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			//TODO
 			}
 		});
 });
-
-function canEdit(){ 
-	return $("#canEdit").val();
-  }
 
 $(document).on('submit','#forma',function(e){
 	$("#errorSnimljeno").hide();
