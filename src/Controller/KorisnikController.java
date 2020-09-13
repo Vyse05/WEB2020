@@ -74,6 +74,24 @@ public class KorisnikController {
 			}
 		}
 	}
+	@GET
+	@Path("/korisnici")
+	public void getKorisniciPage() {
+		try {
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			if (k == null) {
+				servletRequest.getRequestDispatcher("/WEB-INF/korisnici.html").forward(servletRequest, response);
+			} else {
+				response.sendRedirect("/WebProj");
+			}
+		} catch (Exception e1) {
+			try {
+				response.sendRedirect("/WebProj");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@GET
 	@Path("/registracija")

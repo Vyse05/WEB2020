@@ -1,6 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+input[type=text], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=number], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=password], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=submit] {
+	width: 20%;
+	color: white;
+	background-color: grey;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+test {
+	border-radius: 5px;
+}
+</style>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="">
 
@@ -11,77 +77,52 @@
 <title>WebProj</title>
 </head>
 <body>
-<div id='header'></div><br/>
-<div id='sadrzaj'>
-	<h1>Nov Apartman</h1>
-	<form id="forma">
-		<span>Tip</span><br/>
-		<input type="text" placeholder="Tip" id="tip">
-		<span id="errorTip" hidden="true">Niste uneli tip.</span>
-		
-		<br/><br/>
-		
-		<span>Geografska širina</span><br/>
-		<input type="number" placeholder="Geografska širina" id="geografskaSirina">
-		<span id="errorGeografskaSirina" hidden="true">Niste uneli geografsku širinu.</span>
-		
-		<br/><br/>
-		
-		<span>Geografska dužina</span><br/>
-		<input type="number" placeholder="Geografska dužina" id="geografskaDuzina">
-		<span id="errorGeografskaDuzina" hidden="true">Niste uneli geografsku dužinu.</span>
-		
-		<br/><br/>
-		
-		<span>Ulica</span><br/>
-		<input type="text" placeholder="Ulica" id="ulica">
-		<span id="errorUlica" hidden="true">Niste uneli ulicu.</span>
-		<br/><br/>
-				
-		<span>Broj</span><br/>
-		<input type="text" placeholder="Broj" id="broj">
-		<span id="errorBroj" hidden="true">Niste uneli broj.</span>
-		<br/><br/>
-		
-		<span>Naseljeno mesto</span><br/>
-		<input type="text" placeholder="Naseljeno mesto" id="naseljenoMesto">
-		<span id="errorNaseljenoMesto" hidden="true">Niste uneli naseljeno mesto.</span>
-		<br/><br/>
-		
-		<span>Poštanski broj</span><br/>
-		<input type="text" placeholder="Poštanski broj" id="postanskiBroj">
-		<span id="errorPostanskiBroj" hidden="true">Niste uneli poštanski broj.</span>
-		<br/><br/>
-		
-		<span>Broj soba</span><br/>
-		<input type="number" placeholder="Broj soba" id="brojSoba">
-		<span id="errorBrojSoba" hidden="true">Niste uneli broj soba.</span>
-		<br/><br/>
-		
-		<span>Broj gostiju</span><br/>
-		<input type="number" placeholder="Broj gostiju" id="brojGostiju">
-		<span id="errorBrojGostiju" hidden="true">Niste uneli broj gostiju.</span>
-		<br/><br/>
-		
-		<span>Cena</span><br/>
-		<input type="number" placeholder="Cena" id="cena">
-		<span id="errorCena" hidden="true">Niste uneli cenu.</span>
-		<br/><br/>
-		
-		<span>Vreme za prijavu</span><br/>
-		<input type="number" placeholder="Vreme za prijavu" id="vremeZaPrijavu">
-		<span id="errorVremeZaPrijavu" hidden="true">Niste uneli vreme za prijavu.</span>
-		<br/><br/>
-		
-		<span>Vreme za odjavu</span><br/>
-		<input type="number" placeholder="Vreme za odjavu" id="vremeZaOdjavu">
-		<span id="errorVremeZaOdjavu" hidden="true">Niste uneli vreme za odjavu.</span>
-		<br/><br/>
-
-		<span id="snimljeno" hidden="true">Snimljeno</span>
-		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
-		<input type="submit" value="OK">
-	</form>
-</div>
+	<div id='header'></div>
+	<br />
+	<div id='sadrzaj'>
+		<h1>Nov Apartman</h1>
+		<form id="forma">
+			<span>Tip</span><br /> <select name="tip" id="tip">
+				<option value="Soba">Soba</option>
+				<option value="Apartman">Apartman</option>
+			</select> <span id="errorTip" hidden="true">Niste uneli tip.</span> <br /> <br />
+			<span>Geografska širina</span><br /> <input type="number"
+				placeholder="Geografska širina" id="geografskaSirina"> <span
+				id="errorGeografskaSirina" hidden="true">Niste uneli
+				geografsku širinu.</span> <br /> <br /> <span>Geografska dužina</span><br />
+			<input type="number" placeholder="Geografska dužina"
+				id="geografskaDuzina"> <span id="errorGeografskaDuzina"
+				hidden="true">Niste uneli geografsku dužinu.</span> <br /> <br />
+			<span>Ulica</span><br /> <input type="text" placeholder="Ulica"
+				id="ulica"> <span id="errorUlica" hidden="true">Niste
+				uneli ulicu.</span> <br /> <br /> <span>Broj</span><br /> <input
+				type="text" placeholder="Broj" id="broj"> <span
+				id="errorBroj" hidden="true">Niste uneli broj.</span> <br /> <br />
+			<span>Naseljeno mesto</span><br /> <input type="text"
+				placeholder="Naseljeno mesto" id="naseljenoMesto"> <span
+				id="errorNaseljenoMesto" hidden="true">Niste uneli naseljeno
+				mesto.</span> <br /> <br /> <span>Poštanski broj</span><br /> <input
+				type="text" placeholder="Poštanski broj" id="postanskiBroj">
+			<span id="errorPostanskiBroj" hidden="true">Niste uneli
+				poštanski broj.</span> <br /> <br /> <span>Broj soba</span><br /> <input
+				type="number" placeholder="Broj soba" id="brojSoba"> <span
+				id="errorBrojSoba" hidden="true">Niste uneli broj soba.</span> <br />
+			<br /> <span>Broj gostiju</span><br /> <input type="number"
+				placeholder="Broj gostiju" id="brojGostiju"> <span
+				id="errorBrojGostiju" hidden="true">Niste uneli broj gostiju.</span>
+			<br /> <br /> <span>Cena</span><br /> <input type="number"
+				placeholder="Cena" id="cena"> <span id="errorCena"
+				hidden="true">Niste uneli cenu.</span> <br /> <br /> <span>Vreme
+				za prijavu</span><br /> <input type="number"
+				placeholder="Vreme za prijavu" id="vremeZaPrijavu"> <span
+				id="errorVremeZaPrijavu" hidden="true">Niste uneli vreme za
+				prijavu.</span> <br /> <br /> <span>Vreme za odjavu</span><br /> <input
+				type="number" placeholder="Vreme za odjavu" id="vremeZaOdjavu">
+			<span id="errorVremeZaOdjavu" hidden="true">Niste uneli vreme
+				za odjavu.</span> <br /> <br /> <input type="submit" value="Sacuvaj">
+			<span id="snimljeno" hidden="true">Apartman je sacuvan</span> <span
+				id="errorSnimljeno" hidden="true">Postoji greska u formi</span>
+		</form>
+	</div>
 </body>
 </html>

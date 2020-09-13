@@ -2,6 +2,8 @@ $(window).on(
 		'load',
 		function() {
 
+			
+
 			var minMaxFilterEditor = function(cell, onRendered, success,
 					cancel, editorParams) {
 
@@ -83,57 +85,41 @@ $(window).on(
 				// filter.
 			}
 
-			var table = new Tabulator("#example-table", {
-				// data : tabledatabig,
-				ajaxURL : "../WebProj/rest/apartman/svi", // ajax URL
+			var table = new Tabulator("#tabela-korisnika", {
+				ajaxURL : "../korisnik/svi", // ajax URL
 				height : "311px",
 				layout : "fitColumns",
 				pagination : "local",
 				paginationSize : 5,
 				columns : [ {
-					title : "Lokacija",
-					field : "naseljenoMesto",
+					title : "Korisnicko ime",
+					field : "korisnickoIme",
 					headerFilter : "input"
 				}, {
-					title : "Cena",
-					field : "cena",
-					width : 200,
+					title : "Ime",
+					field : "ime",
+					headerFilter : "input"
+				},
+				{
+					title : "Prezime",
+					field : "prezime",
+					headerFilter : "input"
+				},
+				{
+					title : "Pol",
+					field : "pol",
+					headerFilter : "input"
+				},{
+					title : "Uloga",
+					field : "uloga",
+					headerFilter : "input"
+				},{
+					title : "ID",
+					field : "id",
 					sorter : "number",
-					hozAlign : "center",
-					headerFilter : minMaxFilterEditor,
-					headerFilterFunc : minMaxFilterFunction,
-					headerFilterLiveFilter : false
-				}, {
-					title : "Broj Soba",
-					field : "brojSoba",
-					sorter : "number",
-					hozAlign : "center",
-					width : 200,
 					headerFilter : "number",
-					headerFilterPlaceholder : "at least...",
-					headerFilterFunc : ">="
-				}, {
-					title : "Broj Osoba",
-					field : "brojGostiju",
-					sorter : "number",
-					hozAlign : "center",
-					width : 200,
-					headerFilter : "number",
-					headerFilterPlaceholder : "at least...",
-					headerFilterFunc : ">="
-				}, {
-					title : "Datum Dolaska",
-					field : "dob",
-					hozAlign : "center",
-					sorter : "date",
-					headerFilterFunc : ">="
-				}, {
-					title : "Datum Odlaska",
-					field : "dob2",
-					hozAlign : "center",
-					sorter : "date",
-					headerFilterFunc : ">="
-				},  ],
+					headerFilterFunc : "=",
+				}, ],
 				rowClick : function(e, row) {
 					alert("Row " + row.getIndex() + " Context Clicked!!!!")
 				},

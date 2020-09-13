@@ -1,33 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
 
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+input[type=text], select {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=password], select {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 20%;
+  color: white;
+  background-color: blue;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+}
+div {
+  border-radius: 5px;
+  padding: 20px;
+}
+</style>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="">
-<link rel="stylesheet" href="/WEB-INF/myStyle.css">
+
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/login.js"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
 
 <title>WebProj</title>
 </head>
 <body>
-<div id='header'></div><br/>
-		<div class="container">
+<div id='header'></div>
 
-<div id='sadrzaj'>
-	<h1>Log in</h1>
+<div id='sadrzaj' >
+	<h1>Log in:</h1>
 	<form id="forma">
-		<label>Korisničko ime</label><br/>
-		<input class="form-control" type="text" placeholder="Korisničko ime" id="username">
-		<label class="error" id="errorUsername" hidden="true">Niste uneli korisničko ime.</label>
+		<span>Korisničko ime:</span><br/>
+		<input type="text" placeholder="Korisničko ime" id="username"><br/>
+		<span class="error" id="errorUsername" hidden="true">Niste uneli korisničko ime.</span>
 		
 		<br/><br/>
 		
-		<span>Lozinka</span><br/>
-		<input type="password" placeholder="Lozinka" id="password">
+		<span>Lozinka:</span><br/>
+		<input type="password" placeholder="Lozinka" id="password"><br/>
 		<span id="errorPassword" hidden="true">Niste uneli lozinku.</span>
 		<span id="errorLogin" hidden="true">Korisničko ime ili lozinka nisu ispravni.</span>
 		
@@ -35,7 +86,6 @@
 		
 		<input type="submit" value="Log in">
 	</form>
-</div>
 </div>
 </body>
 </html>

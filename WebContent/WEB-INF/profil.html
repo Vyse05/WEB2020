@@ -1,6 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+input[type=text], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=password], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=submit] {
+	width: 20%;
+	color: white;
+	background-color: grey;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+test {
+	border-radius: 5px;
+}
+</style>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="">
 
@@ -11,51 +67,39 @@
 <title>WebProj</title>
 </head>
 <body>
-<div id='header'></div><br/>
-<div id='sadrzaj'>
-	<h1>Profil korisnika</h1>
-	<form id="forma">
-		<input type="hidden" id="canEdit">
-		<span>Korisničko ime</span><br/>
-		<input type="text" placeholder="Korisničko ime" id="username" readonly disabled>
-		<br/><br/>
-		
-		<span>Ime</span><br/>
-		<input type="text" placeholder="Ime" id="ime">
-		<span id="errorIme" hidden="true">Niste uneli ime.</span>	
-		<br/><br/>
-		
-		<span>Prezime</span><br/>
-		<input type="text" placeholder="Prezime" id="prezime">
-		<span id="errorPrezime" hidden="true">Niste uneli prezime.</span>	
-		<br/><br/>
-				
-		<span>Pol</span><br/>
-		<input type="text" placeholder="Pol" id="pol">
-		<span id="errorPol" hidden="true">Niste uneli pol.</span>
-		<br/><br/>
-		
-		<span>Stara lozinka</span><br/>
-		<input type="password" placeholder="Stara lozinka" id="oldPassword">
-		<span id="errorOldPassword" hidden="true">Niste uneli staru lozinku.</span>
-		<br/><br/>
-		
-		<span>Lozinka</span><br/>
-		<input type="password" placeholder="Lozinka" id="password1">
-		<span id="errorPassword1" hidden="true">Niste uneli novu lozinku.</span>
-		<br/><br/>
-		
-		<span>Ponovljena lozinka</span><br/>
-		<input type="password" placeholder="Ponovite novu lozinku" id="password2">
-		<span id="errorPassword2" hidden="true">Niste ponovili novu lozinku.</span>
-		<span id="errorPasswordMatch" hidden="true">Lozinke nisu iste.</span>
-		<br/><br/>
-		
-		<span id="snimljeno" hidden="true">Snimljeno</span>
-		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
-		<br/><br/>
-		<input id="submit" type="submit" value="Snimi">
-	</form>
-</div>
+	<div id='header'></div>
+	<br />
+	<div id='sadrzaj'>
+		<h1>Profil korisnika</h1>
+		<form id="forma">
+			<input type="hidden" id="canEdit"> <span>Korisničko
+				ime</span><br /> <input type="text" placeholder="Korisničko ime"
+				id="username" readonly disabled> <br />
+			<br /> <span>Ime</span><br /> <input type="text" placeholder="Ime"
+				id="ime"> <span id="errorIme" hidden="true">Niste
+				uneli ime.</span> <br />
+			<br /> <span>Prezime</span><br /> <input type="text"
+				placeholder="Prezime" id="prezime"> <span id="errorPrezime"
+				hidden="true">Niste uneli prezime.</span> <br />
+			<br /> <span>Pol</span><br /> <input type="text" placeholder="Pol"
+				id="pol"> <span id="errorPol" hidden="true">Niste
+				uneli pol.</span> <br />
+			<br /> <span>Stara lozinka</span><br /> <input type="password"
+				placeholder="Stara lozinka" id="oldPassword"> <span
+				id="errorOldPassword" hidden="true">Niste uneli staru
+				lozinku.</span> <br />
+			<br /> <span>Lozinka</span><br /> <input type="password"
+				placeholder="Lozinka" id="password1"> <span
+				id="errorPassword1" hidden="true">Niste uneli novu lozinku.</span> <br />
+			<br /> <span>Ponovljena lozinka</span><br /> <input type="password"
+				placeholder="Ponovite novu lozinku" id="password2"> <span
+				id="errorPassword2" hidden="true">Niste ponovili novu
+				lozinku.</span> <span id="errorPasswordMatch" hidden="true">Lozinke
+				nisu iste.</span> <br />
+			<br /> <span id="snimljeno" hidden="true">Snimljeno</span> <span
+				id="errorSnimljeno" hidden="true">Nije snimljeno</span> <br />
+			<br /> <input id="submit" type="submit" value="Snimi">
+		</form>
+	</div>
 </body>
 </html>

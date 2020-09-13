@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <style>
 ul {
 	list-style-type: none;
@@ -24,6 +23,16 @@ li a {
 }
 
 input[type=text], select {
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type=number], select {
 	width: 30%;
 	padding: 12px 20px;
 	margin: 8px 0;
@@ -58,60 +67,29 @@ test {
 	border-radius: 5px;
 }
 </style>
-<meta charset="UTF-8">
-<link rel="shortcut icon" href="">
+<meta charset="ISO-8859-1">
 <link
 	href="https://unpkg.com/tabulator-tables@4.8.0/dist/css/tabulator_modern.min.css"
 	rel="stylesheet">
 <script type="text/javascript"
 	src="https://unpkg.com/tabulator-tables@4.8.0/dist/js/tabulator.min.js"></script>
+
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
+
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
-<script type="text/javascript" src="/WebProj/Scripts/index.js"></script>
+
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<title>WebProj</title>
+<script type="text/javascript" src="/WebProj/Scripts/korisnici.js"></script>
+<title>Svi korisnici</title>
 </head>
 <body>
 	<div id='header'></div>
 
 	<div class="container">
 		<br>
-		<h1>Pretraga Apartmana</h1>
-		<div id="example-table"></div>
+		<h1>Svi korisnici</h1>
+		<div id="tabela-korisnika"></div>
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
