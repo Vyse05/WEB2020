@@ -26,6 +26,20 @@ $(window).on(
 							data.ulica + " " + data.broj + ", "
 									+ data.postanskiBroj + " "
 									+ data.naseljenoMesto);
+					
+					$('.datepicker').datepicker(
+							{
+								format : 'dd-mm-yyyy',
+								startDate : new Date(),
+								beforeShowDay : function(date) {
+									var dateString = moment(date).format('DD-MM-YYYY');
+									if (data.unavailable.indexOf(dateString) != -1) {
+										return false;
+									} else {
+										return true;
+									}
+								}
+							});
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 					// Ne postoji apartman
@@ -71,24 +85,6 @@ $(document).on(
 
 		});
 var disableDates = [ "9-11-2020", "14-11-2019", "15-11-2019", "16-9-2020", "27-12-2019" ];
-
-$(function() {
-
-	$('.datepicker').datepicker(
-			{
-				format : 'yyyy-mm-dd',
-				startDate : new Date(),
-				beforeShowDay : function(date) {
-					dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-"
-							+ date.getFullYear();
-					if (disableDates.indexOf(dmy) != -1) {
-						return false;
-					} else {
-						return true;
-					}
-				}
-			});
-});
 
 function formToJSON(apartmanId, pocetniDatumRezervacije, brojNocenja, poruka) {
 	return JSON.stringify({

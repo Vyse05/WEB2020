@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import Model.Apartman;
 import Model.Korisnik;
+import Model.Rezervacija;
 import Util.DAL;
 import ViewModel.ApartmanRequest;
 import ViewModel.ApartmanResponse;
@@ -53,6 +55,17 @@ public class ApartmanController {
 		}
 
 		return korisnici;
+	}
+	
+	private DAL<Rezervacija> rezervacije(ServletContext application) {
+		@SuppressWarnings("unchecked")
+		DAL<Rezervacija> rezervacije = (DAL<Rezervacija>) application.getAttribute("rezervacije");
+		if (rezervacije == null) {
+			rezervacije = new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
+			application.setAttribute("rezervacije", rezervacije);
+		}
+
+		return rezervacije;
 	}
 
 	@GET
@@ -106,6 +119,14 @@ public class ApartmanController {
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
 		Boolean canEdit = korisnik!=null && korisnik.getId() == domacin.getId();
 		ApartmanResponse response = new ApartmanResponse(apartman, domacin, canEdit);
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		for(Rezervacija rezervacija:rezervacije.get()) {
+			if(rezervacija.getApartmanId() != id || rezervacija.getStatus().equals("ODBIJENA")) {
+				continue;
+			}
+			response.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+		}
+		
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 
@@ -143,6 +164,7 @@ public class ApartmanController {
 		DAL<Apartman> apartmani = apartmani(application);
 		DAL<Korisnik> korisnici = korisnici(application);
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		DAL<Rezervacija> rezervacije = rezervacije(application);
 		
 		for(Apartman apartman:apartmani.get()) {
 			if(apartman.getRemoved()) {
@@ -152,6 +174,14 @@ public class ApartmanController {
 			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
 			Boolean canEdit = korisnik!=null && korisnik.getId() == domacin.getId();
 			ApartmanResponse apartmanResponse = new ApartmanResponse(apartman, domacin, canEdit);
+			
+			for(Rezervacija rezervacija:rezervacije.get()) {
+				if(rezervacija.getApartmanId() != apartman.getId() || rezervacija.getStatus().equals("ODBIJENA")) {
+					continue;
+				}
+				apartmanResponse.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+			}
+			
 			response.add(apartmanResponse);			
 		}
 		

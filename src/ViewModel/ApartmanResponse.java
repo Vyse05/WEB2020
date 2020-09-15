@@ -1,5 +1,8 @@
 package ViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Model.Apartman;
 import Model.Korisnik;
 
@@ -20,6 +23,7 @@ public class ApartmanResponse {
 	private Integer vremeZaPrijavu;
 	private Integer vremeZaOdjavu;
 	private Boolean canEdit;
+	private List<String> unavailable; 
 
 	public ApartmanResponse(Apartman apartman, Korisnik domacin, Boolean canEdit) {
 		super();
@@ -167,5 +171,16 @@ public class ApartmanResponse {
 
 	public void setCanEdit(Boolean canEdit) {
 		this.canEdit = canEdit;
+	}
+
+	public List<String> getUnavailable() {
+		if(unavailable == null) {
+			unavailable = new ArrayList<>();
+		}
+		return unavailable;
+	}
+
+	public void setUnavailable(List<String> unavailable) {
+		this.unavailable = unavailable;
 	}
 }
