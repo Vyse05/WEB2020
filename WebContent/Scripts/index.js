@@ -164,10 +164,6 @@ $(window)
 											title : "Rezervacija",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												alert("Redirefting to: "
-														+ "http://localhost:8080/WebProj/rest/rezervacija/nov/"
-															+ cell.getRow()
-															.getData().id);
 												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/nov/"
 														+ cell.getRow()
 																.getData().id;

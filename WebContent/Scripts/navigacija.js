@@ -3,8 +3,7 @@ $(window)
 				'load',
 				function() {
 
-					var navigacija = '<a href="/WebProj">Home</a>&nbsp&nbsp;'
-							+ '<ul id="servisni"></ul>'
+					var navigacija = '<ul id="servisni"></ul>'
 							+ '<ul id="korisnicki"></ul>';
 					$('#header').html(navigacija);
 

@@ -76,6 +76,7 @@ $(function() {
 
 	$('.datepicker').datepicker(
 			{
+				format : 'yyyy-mm-dd',
 				startDate : new Date(),
 				beforeShowDay : function(date) {
 					dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-"
