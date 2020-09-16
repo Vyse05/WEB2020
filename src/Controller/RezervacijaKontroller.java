@@ -16,11 +16,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import Model.Apartman;
 import Model.Korisnik;
 import Model.Rezervacija;
 import Util.DAL;
+import ViewModel.ErrorResponse;
 import ViewModel.KomentarRequest;
 import ViewModel.RezervacijaRequest;
 import ViewModel.RezervacijaResponse;
@@ -205,5 +207,69 @@ public class RezervacijaKontroller {
 		}
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
+	
+	@PUT
+	@Path("/{id}/zavrsi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response zavrsi(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		if (rezervacija == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Rezervacija ne postoji.")).build();
+		}
+
+		rezervacija.setStatus("ZAVRŠENA");
+		rezervacije.refresh();
+
+		return Response.ok().build();
+	}
+
+	@PUT
+	@Path("/{id}/odbij")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response odbij(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		if (rezervacija == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Rezervacija ne postoji.")).build();
+		}
+
+		rezervacija.setStatus("ODBIJENA");
+		rezervacije.refresh();
+
+		return Response.ok().build();
+	}
+
+	@PUT
+	@Path("/{id}/prihvati")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response prihvati(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		if (rezervacija == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Rezervacija ne postoji.")).build();
+		}
+
+		rezervacija.setStatus("PRIHVAĆENA");
+		rezervacije.refresh();
+
+		return Response.ok().build();
+	}
+
+	@PUT
+	@Path("/{id}/odustani")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response odustani(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		if (rezervacija == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Rezervacija ne postoji.")).build();
+		}
+
+		rezervacija.setStatus("ODUSTANAK");
+		rezervacije.refresh();
+
+		return Response.ok().build();
 	}
 }
