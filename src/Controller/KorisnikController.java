@@ -39,9 +39,11 @@ public class KorisnikController {
 
 	private DAL<Korisnik> korisnici(ServletContext application) {
 		@SuppressWarnings("unchecked")
-		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
+		DAL<Korisnik> korisnici = (DAL<Korisnik>) application
+				.getAttribute("korisnici");
 		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
+			korisnici = new DAL<Korisnik>(Korisnik.class,
+					application.getRealPath("") + "korisnici.txt");
 			application.setAttribute("korisnici", korisnici);
 		}
 
@@ -50,7 +52,8 @@ public class KorisnikController {
 
 	private List<Korisnik> administratori(ServletContext application) {
 		@SuppressWarnings("unchecked")
-		List<Korisnik> administratori = (List<Korisnik>) application.getAttribute("administratori");
+		List<Korisnik> administratori = (List<Korisnik>) application
+				.getAttribute("administratori");
 		if (administratori == null) {
 			administratori = Administratori.get(application);
 		}
@@ -62,9 +65,11 @@ public class KorisnikController {
 	@Path("/login")
 	public void getLogin() {
 		try {
-			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute(
+					"korisnik");
 			if (k == null) {
-				servletRequest.getRequestDispatcher("/WEB-INF/login.html").forward(servletRequest, response);
+				servletRequest.getRequestDispatcher("/WEB-INF/login.html")
+						.forward(servletRequest, response);
 			} else {
 				response.sendRedirect("/WebProj");
 			}
@@ -76,15 +81,19 @@ public class KorisnikController {
 			}
 		}
 	}
+
 	@GET
 	@Path("/korisnici")
 	public void getKorisniciPage() {
 		try {
-			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute(
+					"korisnik");
 			if (k == null) {
-				servletRequest.getRequestDispatcher("/WEB-INF/korisnici.html").forward(servletRequest, response);
-			} else {
 				response.sendRedirect("/WebProj");
+
+			} else {
+				servletRequest.getRequestDispatcher("/WEB-INF/korisnici.html")
+						.forward(servletRequest, response);
 			}
 		} catch (Exception e1) {
 			try {
@@ -99,9 +108,12 @@ public class KorisnikController {
 	@Path("/registracija")
 	public void getRegistracija() {
 		try {
-			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute(
+					"korisnik");
 			if (k == null) {
-				servletRequest.getRequestDispatcher("/WEB-INF/registracija.html").forward(servletRequest, response);
+				servletRequest.getRequestDispatcher(
+						"/WEB-INF/registracija.html").forward(servletRequest,
+						response);
 			} else {
 				response.sendRedirect("/WebProj");
 			}
@@ -118,11 +130,13 @@ public class KorisnikController {
 	@Path("/profil")
 	public void getProfil() {
 		try {
-			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute(
+					"korisnik");
 			if (k == null) {
 				response.sendRedirect("/WebProj/rest/korisnik/login");
 			} else {
-				servletRequest.getRequestDispatcher("/WEB-INF/profil.html").forward(servletRequest, response);
+				servletRequest.getRequestDispatcher("/WEB-INF/profil.html")
+						.forward(servletRequest, response);
 			}
 		} catch (Exception e1) {
 			try {
@@ -137,11 +151,13 @@ public class KorisnikController {
 	@Path("/info")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response info() {
-		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Korisnik korisnik = (Korisnik) servletRequest.getSession()
+				.getAttribute("korisnik");
 		if (korisnik == null) {
 			return Response.status(403).build();
 		} else {
-			return Response.ok(new UserInfoResponse(korisnik), MediaType.APPLICATION_JSON).build();
+			return Response.ok(new UserInfoResponse(korisnik),
+					MediaType.APPLICATION_JSON).build();
 		}
 	}
 
@@ -151,7 +167,8 @@ public class KorisnikController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response izmeniInfo(UserInfoRequest request) {
 
-		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Korisnik korisnik = (Korisnik) servletRequest.getSession()
+				.getAttribute("korisnik");
 
 		if (korisnik == null) {
 			try {
@@ -162,11 +179,16 @@ public class KorisnikController {
 		}
 
 		DAL<Korisnik> korisnici = korisnici(application);
-		Korisnik snimljeniKorisnik = korisnik(korisnici.get(), korisnik.getKorisnickoIme());
+		Korisnik snimljeniKorisnik = korisnik(korisnici.get(),
+				korisnik.getKorisnickoIme());
 		if (snimljeniKorisnik == null) {
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Korisnik ne postoji ili izmena nije moguća.")).build();
+			return Response
+					.status(Status.BAD_REQUEST)
+					.entity(new ErrorResponse(
+							"Korisnik ne postoji ili izmena nije moguća."))
+					.build();
 		}
-		
+
 		if (!request.getStaraLozinka().equals(korisnik.getLozinka())) {
 			return Response.status(403).build();
 		}
@@ -187,8 +209,9 @@ public class KorisnikController {
 		DAL<Korisnik> korisnici = korisnici(application);
 
 		if (korisnik(korisnici.get(), k.getKorisnickoIme()) == null) {
-			Korisnik noviKorisnik = new Korisnik(k.getKorisnickoIme(), k.getLozinka(), k.getIme(), k.getPrezime(),
-					k.getPol(), "Korisnik", false);
+			Korisnik noviKorisnik = new Korisnik(k.getKorisnickoIme(),
+					k.getLozinka(), k.getIme(), k.getPrezime(), k.getPol(),
+					"Korisnik", false);
 
 			korisnici.add(noviKorisnik);
 		} else {
@@ -220,7 +243,8 @@ public class KorisnikController {
 			servletRequest.getSession().setAttribute("korisnik", korisnik);
 		} else {
 			try {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN, "neispravni podaci");
+				response.sendError(HttpServletResponse.SC_FORBIDDEN,
+						"neispravni podaci");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -232,24 +256,29 @@ public class KorisnikController {
 	public void logout() {
 		servletRequest.getSession().invalidate();
 	}
-	
+
 	@PUT
 	@Path("/{id}/domacin")
 	public Response domacin(@PathParam("id") int id) {
-		Korisnik admin = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		if (admin == null || admin.getUloga()!="Administrator") {
-			return Response.status(403).build();
+		Korisnik admin = (Korisnik) servletRequest.getSession().getAttribute(
+				"korisnik");
+		if (admin == null || admin.getUloga().equals("Administrator")) {
+			//return Response.status(403).build();
 		}
-		
+
 		DAL<Korisnik> korisnici = korisnici(application);
 		Korisnik korisnik = korisnici.get().get(id);
-		
-		if(korisnik==null) {
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Korisnik ne postoji ili izmena nije moguća.")).build();
+
+		if (korisnik == null) {
+			return Response
+					.status(Status.BAD_REQUEST)
+					.entity(new ErrorResponse(
+							"Korisnik ne postoji ili izmena nije moguća."))
+					.build();
 		}
 		korisnik.setUloga("Domaćin");
 		korisnici.refresh();
-		
+
 		return Response.ok().build();
 	}
 
@@ -270,7 +299,7 @@ public class KorisnikController {
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	private Korisnik korisnik(List<Korisnik> korisnici, String korisnickoIme) {
 		for (Korisnik korisnik : korisnici) {
 			if (korisnik.getKorisnickoIme().equals(korisnickoIme)) {

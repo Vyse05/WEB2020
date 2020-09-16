@@ -77,6 +77,8 @@ public class RezervacijaKontroller {
 		}
 	}
 
+	
+	
 	@GET
 	@Path("/adminRezervacije")
 	public void adminRezervacije() {
@@ -129,6 +131,16 @@ public class RezervacijaKontroller {
 	public void getRezervacijaPage(@PathParam("id") int id) {
 		try {
 			servletRequest.getRequestDispatcher("/WEB-INF/rezervacija.html").forward(servletRequest, servletResponse);
+		} catch (Exception e1) {
+		}
+	}
+	
+	@GET
+	@Path("/ostaviKomentar/{id}")
+	public void ostaviKomentar() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/ostavljanjeKomentara.html").forward(servletRequest,
+					servletResponse);
 		} catch (Exception e1) {
 		}
 	}

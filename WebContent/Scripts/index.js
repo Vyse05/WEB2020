@@ -9,6 +9,24 @@ $(window)
 						// value
 						return "<label>Rezervisi</label>";
 					};
+					var brisanjeFormat = function(cell, formatterParams,
+							onRendered) { // plain
+						// text
+						// value
+						return "<label>Obrisi</label>";
+					};
+					var aktivacijaFormat = function(cell, formatterParams,
+							onRendered) { // plain
+						// text
+						// value
+						return "<label>Aktiviraj</label>";
+					};
+					var deaktivacijaFormat = function(cell, formatterParams,
+							onRendered) { // plain
+						// text
+						// value
+						return "<label>Deaktiviraj</label>";
+					};
 					var komentarFormat = function(cell, formatterParams,
 							onRendered) { // plain
 						// text
@@ -20,13 +38,6 @@ $(window)
 						// text
 						// value
 						return "<label>Izmeni</label>";
-					};
-
-					var obrisiFormat = function(cell, formatterParams,
-							onRendered) { // plain
-						// text
-						// value
-						return "<label>Obrisi</label>";
 					};
 
 					var minMaxFilterEditor = function(cell, onRendered,
@@ -336,16 +347,6 @@ $(window)
 											headerFilterFunc : ">="
 										},
 										{
-											formatter : rezervacijaFormat,
-											title : "Rezervacija",
-											hozAlign : "center",
-											cellClick : function(e, cell) {
-												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/nov/"
-														+ cell.getRow()
-																.getData().id;
-											}
-										},
-										{
 											formatter : izmeniFormat,
 											title : "Izmeni",
 											hozAlign : "center",
@@ -355,15 +356,86 @@ $(window)
 																.getData().id;
 											},
 
-										}, {
-											formatter : obrisiFormat,
-											title : "Obrisi",
+										},
+										{
+											formatter : brisanjeFormat,
+											title : "Brisanje",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												// window.location.href =
-												// "http://localhost:8080/WebProj/rest/apartman/komentar";
-												// + cell.getRow()
-												// .getData().id;
+												$
+												.ajax({
+													type : 'PUT',
+													url : "/WebProj/rest/rezervacija/"
+															+ id
+															+ "/komentar",
+													contentType : 'application/json',
+													
+													success : function() {
+														alert("Uspesno obrisan")
+													},
+													error : function(
+															XMLHttpRequest,
+															textStatus,
+															errorThrown) {
+														if (XMLHttpRequest.status == 403) {
+															alert("Greska pri brisanju")
+														}
+													}
+												});
+											}
+										},
+										{
+											formatter : aktivacijaFormat,
+											title : "Aktivacija",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												$
+														.ajax({
+															type : 'PUT',
+															url : "/WebProj/rest/rezervacija/"
+																	+ id
+																	+ "/komentar",
+															contentType : 'application/json',
+															
+															success : function() {
+																alert("Uspesno aktiviran")
+															},
+															error : function(
+																	XMLHttpRequest,
+																	textStatus,
+																	errorThrown) {
+																if (XMLHttpRequest.status == 403) {
+																	alert("Greska pri aktivaciji")
+																}
+															}
+														});
+											}
+										},
+										{
+											formatter : deaktivacijaFormat,
+											title : "Deaktivacija",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												$
+														.ajax({
+															type : 'PUT',
+															url : "/WebProj/rest/rezervacija/"
+																	+ id
+																	+ "/komentar",
+															contentType : 'application/json',
+															
+															success : function() {
+																alert("Uspesno deaktiviran")
+															},
+															error : function(
+																	XMLHttpRequest,
+																	textStatus,
+																	errorThrown) {
+																if (XMLHttpRequest.status == 403) {
+																	alert("Greska pri deaktivaciji")
+																}
+															}
+														});
 											}
 										}, ],
 							});

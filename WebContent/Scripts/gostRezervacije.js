@@ -3,6 +3,21 @@ $(window)
 				'load',
 				function() {
 				
+					
+					
+					var gostId;
+					$.ajax({
+						type : 'GET',
+						url : '/WebProj/rest/korisnik/info',
+						dataType : "json",
+						success : function(data) {
+							gostID = data.id;
+						},
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+							//TODO
+							}
+						});
+					
 					var potvrdiFormat = function(cell, formatterParams,
 							onRendered) { // plain
 						// text
@@ -15,6 +30,17 @@ $(window)
 						// value
 						return "<label>Otkazi</label>";
 					};
+					var test = 5;
+
+					var OstaviKomentarFormat = function(cell, formatterParams,
+							onRendered) { // plain
+						if (test == 5){
+							return "<label>Oceni</label>";
+
+						}
+						else return "<label></label>";
+					};
+					
 					var table = new Tabulator(
 							"#korisnik-apartman-table",
 							{
@@ -29,6 +55,7 @@ $(window)
 											title : "Id",
 											field : "id",
 										},
+									
 										{
 											title : "Lokacija",
 											field : "apartman",
@@ -73,7 +100,19 @@ $(window)
 														+ cell.getRow()
 																.getData().id)
 											}
-										}, ],
+										},
+										{
+											formatter : OstaviKomentarFormat,
+											title : "Oceni",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												alert("Treba da otkaze rezervaciju: "
+														+ cell.getRow()
+																.getData().id)
+												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/ostaviKomentar/"+ cell.getRow().getData().id;
+											}
+										},
+										],
 							});
-					//table.setFilter("gostId", "=", "username"); 
+					//table.setFilter("gostId", "=", "gostId");
 				});
