@@ -23,6 +23,7 @@ public class ApartmanResponse {
 	private Integer vremeZaPrijavu;
 	private Integer vremeZaOdjavu;
 	private Boolean canEdit;
+	private Boolean aktivno;
 	private List<String> unavailable; 
 
 	public ApartmanResponse(Apartman apartman, Korisnik domacin, Boolean canEdit) {
@@ -42,6 +43,7 @@ public class ApartmanResponse {
 		this.cena = apartman.getCena();
 		this.vremeZaPrijavu = apartman.getVremeZaPrijavu();
 		this.vremeZaOdjavu = apartman.getVremeZaOdjavu();
+		this.setAktivno(apartman.getAktivno());
 		this.canEdit = canEdit;
 	}
 
@@ -182,5 +184,13 @@ public class ApartmanResponse {
 
 	public void setUnavailable(List<String> unavailable) {
 		this.unavailable = unavailable;
+	}
+
+	public Boolean getAktivno() {
+		return aktivno;
+	}
+
+	public void setAktivno(Boolean aktivno) {
+		this.aktivno = aktivno;
 	}
 }

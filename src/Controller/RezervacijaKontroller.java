@@ -126,7 +126,7 @@ public class RezervacijaKontroller {
 
 	@GET
 	@Path("/{id}")
-	public void getApartmanPage(@PathParam("id") int id) {
+	public void getRezervacijaPage(@PathParam("id") int id) {
 		try {
 			servletRequest.getRequestDispatcher("/WEB-INF/rezervacija.html").forward(servletRequest, servletResponse);
 		} catch (Exception e1) {
@@ -136,7 +136,7 @@ public class RezervacijaKontroller {
 	@PUT
 	@Path("/{id}/komentar")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response izmeniApartman(@PathParam("id") int id, KomentarRequest request) {
+	public Response dodajKomentar(@PathParam("id") int id, KomentarRequest request) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
 		
