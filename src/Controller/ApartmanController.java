@@ -3,6 +3,8 @@ package Controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -56,7 +58,7 @@ public class ApartmanController {
 
 		return korisnici;
 	}
-	
+
 	private DAL<Rezervacija> rezervacije(ServletContext application) {
 		@SuppressWarnings("unchecked")
 		DAL<Rezervacija> rezervacije = (DAL<Rezervacija>) application.getAttribute("rezervacije");
@@ -85,7 +87,7 @@ public class ApartmanController {
 		} catch (Exception e1) {
 		}
 	}
-	
+
 	@POST
 	@Path("/nov")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -126,16 +128,24 @@ public class ApartmanController {
 		DAL<Korisnik> korisnici = korisnici(application);
 		Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		Boolean canEdit = korisnik!=null && korisnik.getId() == domacin.getId();
+		Boolean canEdit = korisnik != null && korisnik.getId() == domacin.getId();
 		ApartmanResponse response = new ApartmanResponse(apartman, domacin, canEdit);
 		DAL<Rezervacija> rezervacije = rezervacije(application);
-		for(Rezervacija rezervacija:rezervacije.get()) {
-			if(rezervacija.getApartmanId() != id || rezervacija.getStatus().equals("ODBIJENA")) {
+		for (Rezervacija rezervacija : rezervacije.get()) {
+			if (rezervacija.getApartmanId() != id || rezervacija.getStatus().equals("ODBIJENA")) {
 				continue;
 			}
-			response.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+			response.getUnavailable()
+					.add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+			for (int i = 1; i < rezervacija.getBrojNocenja(); i++) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(rezervacija.getPocetniDatumRezervacije());
+				c.add(Calendar.DATE, i);
+				Date newDate = c.getTime();
+				response.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(newDate));
+			}
 		}
-		
+
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 
@@ -163,7 +173,7 @@ public class ApartmanController {
 		apartmani.refresh();
 		return Response.ok().build();
 	}
-	
+
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -174,26 +184,34 @@ public class ApartmanController {
 		DAL<Korisnik> korisnici = korisnici(application);
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
 		DAL<Rezervacija> rezervacije = rezervacije(application);
-		
-		for(Apartman apartman:apartmani.get()) {
-			if(apartman.getRemoved()) {
+
+		for (Apartman apartman : apartmani.get()) {
+			if (apartman.getRemoved()) {
 				continue;
 			}
-			
+
 			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
-			Boolean canEdit = korisnik!=null && korisnik.getId() == domacin.getId();
+			Boolean canEdit = korisnik != null && korisnik.getId() == domacin.getId();
 			ApartmanResponse apartmanResponse = new ApartmanResponse(apartman, domacin, canEdit);
-			
-			for(Rezervacija rezervacija:rezervacije.get()) {
-				if(rezervacija.getApartmanId() != apartman.getId() || rezervacija.getStatus().equals("ODBIJENA")) {
+
+			for (Rezervacija rezervacija : rezervacije.get()) {
+				if (rezervacija.getApartmanId() != apartman.getId() || rezervacija.getStatus().equals("ODBIJENA")) {
 					continue;
 				}
-				apartmanResponse.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+				apartmanResponse.getUnavailable()
+						.add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+				for (int i = 1; i < rezervacija.getBrojNocenja(); i++) {
+					Calendar c = Calendar.getInstance();
+					c.setTime(rezervacija.getPocetniDatumRezervacije());
+					c.add(Calendar.DATE, i);
+					Date newDate = c.getTime();
+					apartmanResponse.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(newDate));
+				}
 			}
-			
-			response.add(apartmanResponse);			
+
+			response.add(apartmanResponse);
 		}
-		
+
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 }

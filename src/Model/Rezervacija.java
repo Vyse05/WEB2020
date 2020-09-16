@@ -42,7 +42,7 @@ public class Rezervacija extends Removable {
 		this.ukupnaCena = request.getBrojNocenja()*apartman.getCena();
 		this.poruka = request.getPoruka();
 		this.gostId = korisnik.getId();
-		this.status = "Kreirana";
+		this.status = "KREIRANA";
 		this.komentar = null;
 		this.ocena = null;
 		this.prikazatiKomentar = null;

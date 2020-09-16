@@ -1,6 +1,6 @@
 package ViewModel;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import Model.Apartman;
 import Model.Korisnik;
@@ -10,7 +10,7 @@ public class RezervacijaResponse {
 	private Integer id;
 	private Integer apartmanId;
 	private String apartman;
-	private Date pocetniDatumRezervacije;
+	private String pocetniDatumRezervacije;
 	private Integer brojNocenja;
 	private Integer ukupnaCena;
 	private String poruka;
@@ -27,7 +27,7 @@ public class RezervacijaResponse {
 		this.apartmanId = rezervacija.getApartmanId();
 		this.apartman = apartman.getUlica() + " " + apartman.getBroj() + ", " + apartman.getPostanskiBroj() + " "
 				+ apartman.getNaseljenoMesto();
-		this.pocetniDatumRezervacije = rezervacija.getPocetniDatumRezervacije();
+		this.pocetniDatumRezervacije = new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije());
 		this.brojNocenja = rezervacija.getBrojNocenja();
 		this.ukupnaCena = rezervacija.getUkupnaCena();
 		this.poruka = rezervacija.getPoruka();
@@ -63,11 +63,11 @@ public class RezervacijaResponse {
 		this.apartman = apartman;
 	}
 
-	public Date getPocetniDatumRezervacije() {
+	public String getPocetniDatumRezervacije() {
 		return pocetniDatumRezervacije;
 	}
 
-	public void setPocetniDatumRezervacije(Date pocetniDatumRezervacije) {
+	public void setPocetniDatumRezervacije(String pocetniDatumRezervacije) {
 		this.pocetniDatumRezervacije = pocetniDatumRezervacije;
 	}
 
