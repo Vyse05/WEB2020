@@ -57,30 +57,25 @@ test {
 	border-radius: 5px;
 }
 </style>
-<meta charset="UTF-8">
-<link rel="shortcut icon" href="">
-
+<meta charset="ISO-8859-1">
+<title>Gost Rezervacije</title>
+<link
+	href="https://unpkg.com/tabulator-tables@4.8.0/dist/css/tabulator_modern.min.css"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="https://unpkg.com/tabulator-tables@4.8.0/dist/js/tabulator.min.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
-<script type="text/javascript" src="/WebProj/Scripts/novSadrzaj.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/gostRezervacije.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<title>WebProj</title>
+
 </head>
 <body>
-<div id='header'></div><br/>
-<div id='sadrzaj'>
-	<h1>Nov Sadrzaj</h1>
-	<form id="forma">
-		<span>Naziv</span><br/>
-		<input type="text" placeholder="Naziv" id="naziv">
-		<span id="errorNaziv" hidden="true">Niste uneli naziv.</span>
-		
-		<br/><br/>
-
-		<span id="snimljeno" hidden="true">Snimljeno</span>
-		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
-		<input type="submit" value="OK">
-	</form>
-</div>
+	<div id='header'></div>
+	<br>
+	<h1>Moje rezervacije</h1>
+	<div id="korisnik-apartman-table"></div>
 </body>
 </html>

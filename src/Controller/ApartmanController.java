@@ -77,6 +77,15 @@ public class ApartmanController {
 		}
 	}
 
+	@GET
+	@Path("/komentar")
+	public void komentarPage() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/komentari.html").forward(servletRequest, servletResponse);
+		} catch (Exception e1) {
+		}
+	}
+	
 	@POST
 	@Path("/nov")
 	@Consumes(MediaType.APPLICATION_JSON)

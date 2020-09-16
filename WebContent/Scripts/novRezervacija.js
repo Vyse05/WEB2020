@@ -29,7 +29,7 @@ $(window).on(
 					
 					$('.datepicker').datepicker(
 							{
-								format : 'dd-mm-yyyy',
+								format : 'yyyy-mm-dd',
 								startDate : new Date(),
 								beforeShowDay : function(date) {
 									var dateString = moment(date).format('DD-MM-YYYY');
@@ -84,7 +84,7 @@ $(document).on(
 			}
 
 		});
-var disableDates = [ "9-11-2020", "14-11-2019", "15-11-2019", "16-9-2020", "27-12-2019" ];
+var disableDates = [ "9-11-2020", "14-11-2019", "15-11-2019", "18-9-2020", "27-12-2019" ];
 
 function formToJSON(apartmanId, pocetniDatumRezervacije, brojNocenja, poruka) {
 	return JSON.stringify({

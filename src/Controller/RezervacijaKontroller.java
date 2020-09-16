@@ -64,6 +64,26 @@ public class RezervacijaKontroller {
 
 		return apartmani;
 	}
+	
+	@GET
+	@Path("/gostRezervacije")
+	public void gostRezervacije() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/gostRezervacije.html").forward(servletRequest,
+					servletResponse);
+		} catch (Exception e1) {
+		}
+	}
+
+	@GET
+	@Path("/adminRezervacije")
+	public void adminRezervacije() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/adminRezervacije.html").forward(servletRequest,
+					servletResponse);
+		} catch (Exception e1) {
+		}
+	}
 
 	@GET
 	@Path("/nov/{id}")

@@ -22,6 +22,7 @@ $(window)
 									$('#korisnicki')
 											.append(
 													'<li><a onclick="logout()" href="#">Log out</a></li>&nbsp;&nbsp;');
+									
 									if (data.uloga == 'Domaćin') {
 										$('#korisnicki')
 												.append(
@@ -31,6 +32,18 @@ $(window)
 										$('#korisnicki')
 												.append(
 														'<li><a href="/WebProj/rest/sadrzaj/nov">Nov Sadrzaj</a>&nbsp;&nbsp;</li>');
+										$('#korisnicki')
+												.append(
+														'<li><a href="/WebProj/rest/korisnik/korisnici">Korisnici</a>&nbsp;&nbsp;</li>');
+									}
+									$('#korisnicki')
+									.append(
+											'<li><a href="/WebProj/rest/rezervacija/gostRezervacije">Sve Rezervacije</a></li>&nbsp;&nbsp;');
+									if (data.uloga == 'Korisnik') {
+										$('#korisnicki')
+												.append(
+												'<li><a href="/WebProj/rest/rezervacija/gostRezervacije">Moje Rezervacije</a></li>&nbsp;&nbsp;');
+										
 									}
 								},
 								error : function(XMLHttpRequest, textStatus,
