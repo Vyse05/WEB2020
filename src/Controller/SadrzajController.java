@@ -30,14 +30,7 @@ public class SadrzajController {
 	HttpServletResponse servletResponse;
 
 	private DAL<Sadrzaj> sadrzaji(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Sadrzaj> sadrzaji = (DAL<Sadrzaj>) application.getAttribute("sadrzaji");
-		if (sadrzaji == null) {
-			sadrzaji = new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath("") + "sadrzaji.txt");
-			application.setAttribute("sadrzaji", sadrzaji);
-		}
-
-		return sadrzaji;
+		return new DAL<Sadrzaj>(Sadrzaj.class, application.getRealPath("") + "sadrzaji.txt");
 	}
 	
 	@GET

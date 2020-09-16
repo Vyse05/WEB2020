@@ -30,6 +30,7 @@ import Util.DAL;
 import ViewModel.ApartmanRequest;
 import ViewModel.ApartmanResponse;
 import ViewModel.ErrorResponse;
+import ViewModel.KomentarResponse;
 
 @Path("apartman")
 public class ApartmanController {
@@ -41,36 +42,16 @@ public class ApartmanController {
 	HttpServletResponse servletResponse;
 
 	private DAL<Apartman> apartmani(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Apartman> apartmani = (DAL<Apartman>) application.getAttribute("apartmani");
-		if (apartmani == null) {
-			apartmani = new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
-			application.setAttribute("apartmani", apartmani);
-		}
-
-		return apartmani;
+		return new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
 	}
 
 	private DAL<Korisnik> korisnici(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
-		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
-			application.setAttribute("korisnici", korisnici);
-		}
-
-		return korisnici;
+		return new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
 	}
 
 	private DAL<Rezervacija> rezervacije(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Rezervacija> rezervacije = (DAL<Rezervacija>) application.getAttribute("rezervacije");
-		if (rezervacije == null) {
-			rezervacije = new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
-			application.setAttribute("rezervacije", rezervacije);
-		}
 
-		return rezervacije;
+		return new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
 	}
 
 	@GET
@@ -127,9 +108,14 @@ public class ApartmanController {
 	public Response getApartmanInfo(@PathParam("id") int id) {
 
 		DAL<Apartman> apartmani = apartmani(application);
-		Apartman apartman = apartmani.get().get(id);
-		
-		if(apartman==null || apartman.getRemoved()) {
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		
@@ -165,8 +151,14 @@ public class ApartmanController {
 
 		DAL<Apartman> apartmani = apartmani(application);
 
-		Apartman apartman = apartmani.get().get(id);
-		if(apartman==null || apartman.getRemoved()) {
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		
@@ -185,6 +177,81 @@ public class ApartmanController {
 
 		apartmani.refresh();
 		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("/{id}/komentariKorisnik")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getApartmanKomentariKorisnik(@PathParam("id") int id) {
+
+		DAL<Apartman> apartmani = apartmani(application);
+
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		List<KomentarResponse> response = new ArrayList<>();
+
+		DAL<Korisnik> korisnici = korisnici(application);
+
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		for (Rezervacija rezervacija : rezervacije.get()) {
+			if (rezervacija.getApartmanId() != id
+					|| (!rezervacija.getStatus().equals("ZAVRŠENA") && !rezervacija.getStatus().equals("ODBIJENA"))
+					|| rezervacija.getOcena() == null || rezervacija.getKomentar() == null
+					|| (rezervacija.getPrikazatiKomentar() != null && !rezervacija.getPrikazatiKomentar())) {
+				continue;
+			}
+			Korisnik gost = korisnici.get().get(rezervacija.getGostId());
+
+			response.add(new KomentarResponse(rezervacija, gost, apartman));
+		}
+
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	@Path("/{id}/komentariAdmin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getApartmanKomentariAdmin(@PathParam("id") int id) {
+
+		DAL<Apartman> apartmani = apartmani(application);
+
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		List<KomentarResponse> response = new ArrayList<>();
+
+		DAL<Korisnik> korisnici = korisnici(application);
+
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		for (Rezervacija rezervacija : rezervacije.get()) {
+			if (rezervacija.getApartmanId() != id || rezervacija.getApartmanId() != id
+					|| (!rezervacija.getStatus().equals("ZAVRŠENA") && !rezervacija.getStatus().equals("ODBIJENA"))
+					|| rezervacija.getOcena() == null || rezervacija.getKomentar() == null) {
+				continue;
+			}
+			Korisnik gost = korisnici.get().get(rezervacija.getGostId());
+
+			response.add(new KomentarResponse(rezervacija, gost, apartman));
+		}
+
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -233,8 +300,15 @@ public class ApartmanController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response brisanje(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
-		Apartman apartman = apartmani.get().get(id);
-		if(apartman==null || apartman.getRemoved()) {
+		
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		
@@ -249,8 +323,14 @@ public class ApartmanController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deaktiviraj(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
-		Apartman apartman = apartmani.get().get(id);
-		if(apartman==null || apartman.getRemoved()) {
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		
@@ -265,8 +345,14 @@ public class ApartmanController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response aktiviraj(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
-		Apartman apartman = apartmani.get().get(id);
-		if(apartman==null || apartman.getRemoved()) {
+		Apartman apartman;
+		try {
+			apartman = apartmani.get().get(id);
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+
+		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		

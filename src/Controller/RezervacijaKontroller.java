@@ -35,36 +35,15 @@ public class RezervacijaKontroller {
 	HttpServletResponse servletResponse;
 
 	private DAL<Rezervacija> rezervacije(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Rezervacija> rezervacije = (DAL<Rezervacija>) application.getAttribute("rezervacije");
-		if (rezervacije == null) {
-			rezervacije = new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
-			application.setAttribute("rezervacije", rezervacije);
-		}
-
-		return rezervacije;
+		return new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
 	}
 
 	private DAL<Korisnik> korisnici(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
-		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
-			application.setAttribute("korisnici", korisnici);
-		}
-
-		return korisnici;
+		return new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
 	}
 
 	private DAL<Apartman> apartmani(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Apartman> apartmani = (DAL<Apartman>) application.getAttribute("apartmani");
-		if (apartmani == null) {
-			apartmani = new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
-			application.setAttribute("apartmani", apartmani);
-		}
-
-		return apartmani;
+		return new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
 	}
 	
 	@GET
@@ -154,6 +133,8 @@ public class RezervacijaKontroller {
 		
 		rezervacija.setKomentar(request.getKomentar());
 		rezervacija.setOcena(request.getOcena());
+		rezervacija.setPrikazatiKomentar(false);
+		
 		rezervacije.refresh();
 		
 		return Response.ok().build();
