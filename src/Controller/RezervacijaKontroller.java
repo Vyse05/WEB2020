@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,6 +21,7 @@ import Model.Apartman;
 import Model.Korisnik;
 import Model.Rezervacija;
 import Util.DAL;
+import ViewModel.KomentarRequest;
 import ViewModel.RezervacijaRequest;
 import ViewModel.RezervacijaResponse;
 
@@ -129,6 +131,46 @@ public class RezervacijaKontroller {
 			servletRequest.getRequestDispatcher("/WEB-INF/rezervacija.html").forward(servletRequest, servletResponse);
 		} catch (Exception e1) {
 		}
+	}
+	
+	@PUT
+	@Path("/{id}/komentar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response izmeniApartman(@PathParam("id") int id, KomentarRequest request) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		
+		rezervacija.setKomentar(request.getKomentar());
+		rezervacija.setOcena(request.getOcena());
+		rezervacije.refresh();
+		
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Path("/{id}/odobriKomentar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response odobriKomentar(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		
+		rezervacija.setPrikazatiKomentar(true);
+		rezervacije.refresh();
+		
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Path("/{id}/sakrijKomentar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response sakrijKomentar(@PathParam("id") int id) {
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		Rezervacija rezervacija = rezervacije.get().get(id);
+		
+		rezervacija.setPrikazatiKomentar(false);
+		rezervacije.refresh();
+		
+		return Response.ok().build();
 	}
 
 	@GET

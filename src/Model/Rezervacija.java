@@ -30,16 +30,22 @@ public class Rezervacija extends Removable {
 		poruka = tokenizer.nextToken().trim();
 		gostId = Integer.parseInt(tokenizer.nextToken().trim());
 		status = tokenizer.nextToken().trim();
-		komentar = tokenizer.nextToken().trim().equals("null")? null : tokenizer.nextToken().trim();
-		ocena = tokenizer.nextToken().trim().equals("null")? null : Integer.parseInt(tokenizer.nextToken().trim());
-		prikazatiKomentar = tokenizer.nextToken().trim().equals("true");
+		
+		String komentarTemp = tokenizer.nextToken().trim();
+		komentar = komentarTemp.equals("null") ? null : komentarTemp;
+		
+		String ocenaTemp = tokenizer.nextToken().trim();
+		ocena = ocenaTemp.equals("null") ? null : Integer.parseInt(ocenaTemp);
+		
+		String prikazatiTemp = tokenizer.nextToken().trim();
+		prikazatiKomentar = prikazatiTemp.equals("null") ? null : prikazatiTemp.equals("true");
 	}
 
 	public Rezervacija(RezervacijaRequest request, Apartman apartman, Korisnik korisnik) {
 		this.apartmanId = request.getApartmanId();
 		this.pocetniDatumRezervacije = request.getPocetniDatumRezervacije();
 		this.brojNocenja = request.getBrojNocenja();
-		this.ukupnaCena = request.getBrojNocenja()*apartman.getCena();
+		this.ukupnaCena = request.getBrojNocenja() * apartman.getCena();
 		this.poruka = request.getPoruka();
 		this.gostId = korisnik.getId();
 		this.status = "KREIRANA";
