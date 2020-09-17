@@ -3,14 +3,27 @@ $(window)
 		.on(
 				'load',
 				function() {
-					
-				
-						
-						var url = window.location.pathname;
-						var id = url.substring(url.lastIndexOf('/') + 1);
-						
-					
-					
+					var url = window.location.pathname;
+					var id = url.substring(url.lastIndexOf('/') + 1);
+
+					$.ajax({
+						type : 'GET',
+						url : '/WebProj/rest/korisnik/info',
+						dataType : "json",
+						success : function(data) {
+							if (data.uloga == 'Administrator') {
+								$("#korisnik-group").prop("hidden", true);
+							} else if (data.uloga = "Korisnik") {
+								$("#domacin-group").prop("hidden", true);
+							} else if (data.uloga = "Domaćin") {
+								$("#korisnik-group").prop("hidden", true);
+							}
+						},
+						error : function(XMLHttpRequest, textStatus,
+								errorThrown) {
+							// TODO
+						}
+					});
 
 					var odobriFormat = function(cell, formatterParams,
 							onRendered) { // plain
@@ -33,7 +46,7 @@ $(window)
 							value : "true"
 						} ],
 						height : "311px",
-						ajaxURL : "../"+id+"/komentariKorisnik",
+						ajaxURL : "../" + id + "/komentariKorisnik",
 						layout : "fitDataTable",
 
 						columns : [ {
@@ -41,7 +54,7 @@ $(window)
 							field : "komentar",
 							hozAlign : "center",
 							width : 800,
-							formatter:"textarea",
+							formatter : "textarea",
 							// sorter : "string",
 							width : 800,
 						}, {
@@ -50,22 +63,21 @@ $(window)
 							vertAlign : "center",
 							hozAlign : "center",
 							field : "ocena",
-							formatter:"star",
+							formatter : "star",
 						// sorter : "number"
-						},
-						],
+						}, ],
 					});
-					
+
 					var table2 = new Tabulator(
 							"#example-table2",
 							{
 								height : "311px",
-								ajaxURL : "../"+id+"/komentariAdmin",
+								ajaxURL : "../" + id + "/komentariAdmin",
 								layout : "fitDataTable",
 								initialFilter : [ {
-									field: "canEdit",
-									type: "like",
-									value: "true"
+									field : "canEdit",
+									type : "like",
+									value : "true"
 								} ],
 								columns : [
 										{
@@ -82,7 +94,7 @@ $(window)
 											vertAlign : "center",
 											hozAlign : "center",
 											field : "ocena",
-											formatter:"star",
+											formatter : "star",
 
 										// sorter : "number"
 										},
@@ -116,7 +128,7 @@ $(window)
 																	+ "/odobriKomentar",
 															success : function(
 																	data) { // Vec
-																			// Ulogovan
+																// Ulogovan
 																alert("Komentar je Odobren");
 															},
 															error : function(
@@ -151,7 +163,7 @@ $(window)
 																	+ "/sakrijKomentar",
 															success : function(
 																	data) { // Vec
-																			// Ulogovan
+																// Ulogovan
 																alert("Komentar je Sakriven");
 															},
 															error : function(

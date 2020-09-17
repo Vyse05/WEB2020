@@ -32,16 +32,6 @@ input[type=text], select {
 	box-sizing: border-box;
 }
 
-input[type=number], select {
-	width: 30%;
-	padding: 12px 20px;
-	margin: 8px 0;
-	display: inline-block;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
 input[type=password], select {
 	width: 30%;
 	padding: 12px 20px;
@@ -68,23 +58,26 @@ test {
 }
 </style>
 <meta charset="UTF-8">
-<link href="/WebProj/Scripts/tabulator_modern.css" rel="stylesheet">
-<script type="text/javascript" src="/WebProj/Scripts/tabulator.min.js"></script>
 
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
-
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
-
-<script type="text/javascript" src="/WebProj/Scripts/korisniciDomacin.js"></script>
-<title>Svi gosti</title>
+<script type="text/javascript" src="/WebProj/Scripts/izmeniSadrzaj.js"></script>
+<title>Izmeni sadrzaj</title>
 </head>
 <body>
-	<div id='header'></div>
+<div id='header'></div><br/>
+<h1>Izmeni Sadrzaj</h1>
+	<form id="forma">
+		<span>Naziv</span><br/>
+		<input type="text" placeholder="Naziv" id="naziv" >
+		<span id="errorNaziv" hidden="true">Niste uneli naziv.</span>
+		
+		<br/><br/>
 
-	<div class="container">
-		<br>
-		<h1>Svi gosti</h1>
-		<div id="tabela-korisnika"></div>
-	</div>
+		<span id="snimljeno" hidden="true">Snimljeno</span>
+		<span id="errorSnimljeno" hidden="true">Nije snimljeno</span>
+		<input type="submit" value="OK">
+	</form>
+
 </body>
 </html>

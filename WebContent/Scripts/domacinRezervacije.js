@@ -41,11 +41,7 @@ $(window)
 							{
 								ajaxURL : "../rezervacija/svi", // ajax
 								// URL
-								initialFilter : [ {
-									field: "canEdit",
-									type: "like",
-									value: "true"
-								} ],
+								
 								height : "311px",
 								pagination : "local",
 								layout : "fitColumns",

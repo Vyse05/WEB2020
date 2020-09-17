@@ -107,8 +107,10 @@ public class ApartmanController {
 		Apartman novApartman = new Apartman(request.getTip(), k.getId(), request.getGeografskaSirina(),
 				request.getGeografskaDuzina(), request.getUlica(), request.getBroj(), request.getNaseljenoMesto(),
 				request.getPostanskiBroj(), request.getBrojSoba(), request.getBrojGostiju(), request.getCena(),
-				request.getVremeZaPrijavu(), request.getVremeZaOdjavu(), request.getSadrzajIds(), true);
+
+				request.getVremeZaPrijavu(), request.getVremeZaOdjavu(), request.getSadrzajIds(), false);
 		apartmani.add(novApartman);
+
 
 		return Response.ok().build();
 	}

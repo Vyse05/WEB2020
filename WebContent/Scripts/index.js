@@ -2,6 +2,34 @@ $(window)
 		.on(
 				'load',
 				function() {
+					
+					$.ajax({
+						type : 'GET',
+						url : '/WebProj/rest/korisnik/info',
+						dataType : "json",
+						success : function(data) {
+							if(data.uloga == 'Administrator'){
+								$("#neulogovan-group").prop( "hidden", true );
+								$("#korisnik-group").prop( "hidden", true );
+								$("#domacin-group").prop( "hidden", true );
+							}else if(data.uloga = "Korisnik"){
+								$("#neulogovan-group").prop( "hidden", true );
+								$("#domacin-group").prop( "hidden", true );
+								$("#admin-group").prop( "hidden", true );
+							}else if(data.uloga = "Domaćin"){
+								$("#neulogovan-group").prop( "hidden", true );
+								$("#korisnik-group").prop( "hidden", true );
+								$("#admin-group").prop( "hidden", true );
+							}else if(data.uloga = ""){
+								$("#domacin-group").prop( "hidden", true );
+								$("#korisnik-group").prop( "hidden", true );
+								$("#admin-group").prop( "hidden", true );
+							}
+						},
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+							//TODO
+							}
+						});
 
 					var rezervacijaFormat = function(cell, formatterParams,
 							onRendered) { // plain

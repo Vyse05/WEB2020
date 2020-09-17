@@ -31,3 +31,56 @@ function formToJSON(naziv) {
 		"naziv" : naziv
 	});
 }
+
+$(window).on(
+		'load',
+		function() {
+			var table = new Tabulator("#example-table", {
+
+				height : "311px",
+				ajaxURL : "../sadrzaj/svi",
+				layout : "fitDataTable",
+
+				columns : [
+						{
+							title : "ID",
+							field : "id",
+						},
+						{
+							title : "Naziv",
+							field : "naziv",
+						},
+						{
+							title : "Izmeni Sadrzaj",
+							formatter : function(cell, formatterParams,
+									onRendered) {
+								return "<label>Izmeni</label>";
+							},
+							hozAlign : "center",
+							cellClick : function(e, cell) {
+								window.location.href = "/WebProj/rest/sadrzaj/"
+										+ cell.getRow().getData().id
+										+ "/izmeni";
+							}
+
+						},
+						{
+							formatter : function(cell, formatterParams,
+									onRendered) {
+								if (cell.getRow().getData().obrisan == false) {
+									return "<label>Obrisi</label>";
+								} else {
+									return "";
+								}
+							},
+							title : "Obrisi Sadrzaj",
+							hozAlign : "center",
+							cellClick : function(e, cell) {
+								window.location.href = "/WebProj/rest/sadrzaj/"
+										+ cell.getRow().getData().id
+										+ "/izmeni";
+							}
+						}, ],
+			});
+
+		});

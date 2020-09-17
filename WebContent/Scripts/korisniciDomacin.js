@@ -126,13 +126,7 @@ $(window)
 											field : "uloga",
 											headerFilter : "input"
 										},
-										{
-											title : "ID",
-											field : "id",
-											sorter : "number",
-											headerFilter : "number",
-											headerFilterFunc : "=",
-										},],
+										],
 
 							});
 				});

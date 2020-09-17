@@ -57,6 +57,17 @@ public class SadrzajController {
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 	
+	
+	@GET
+	@Path("/izmeni/{id}")
+	public void izmeniPage() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/izmeniSadrzaj.html").forward(servletRequest, servletResponse);
+		} catch (Exception e1) {
+		}
+	}
+
+	
 	@GET
 	@Path("/nov")
 	public void novPage() {

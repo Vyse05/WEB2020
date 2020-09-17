@@ -41,7 +41,6 @@ textarea {
 	border-radius: 4px;
 	box-sizing: border-box;
 	readonly: true;
-	
 }
 
 input[type=password], select {
@@ -65,7 +64,6 @@ input[type=submit] {
 	cursor: pointer;
 }
 
-
 test {
 	border-radius: 5px;
 }
@@ -78,7 +76,7 @@ test {
 	src="https://unpkg.com/tabulator-tables@4.8.0/dist/js/tabulator.min.js"></script -->
 <link href="/WebProj/Scripts/tabulator_modern.css" rel="stylesheet">
 <script type="text/javascript" src="/WebProj/Scripts/tabulator.min.js"></script>
-	
+
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
 <script type="text/javascript" src="/WebProj/Scripts/komentari.js"></script>
@@ -89,16 +87,20 @@ test {
 <body>
 	<div id='header'></div>
 	<br>
-	<h1>Komentari Korisnik</h1>
-	<br>
-	<div>
-		<div id="example-table"></div>
+	<div id="korisnik-group">
+		<h1>Komentari Korisnik</h1>
+		<br>
+		<div>
+			<div id="example-table"></div>
+		</div>
 	</div>
-	<br>
-	<h1>Komentari Domacin/Admin</h1>
-	<br>
-	<div>
-		<div id="example-table2"></div>
+	<div id="domacin-group">
+		<br>
+		<h1>Komentari Domacin/Admin</h1>
+		<br>
+		<div>
+			<div id="example-table2"></div>
+		</div>
 	</div>
 </body>
 </html>
