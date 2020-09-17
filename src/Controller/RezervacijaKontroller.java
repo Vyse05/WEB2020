@@ -47,26 +47,44 @@ public class RezervacijaKontroller {
 	private DAL<Apartman> apartmani(ServletContext application) {
 		return new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
 	}
-	
+
 	@GET
 	@Path("/gostRezervacije")
 	public void gostRezervacije() {
 		try {
-			servletRequest.getRequestDispatcher("/WEB-INF/gostRezervacije.html").forward(servletRequest,
-					servletResponse);
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			if (k == null || !k.getUloga().equals("Korisnik")) {
+				servletResponse.sendRedirect("/WebProj");
+			} else {
+				servletRequest.getRequestDispatcher("/WEB-INF/gostRezervacije.html").forward(servletRequest,
+						servletResponse);
+			}
 		} catch (Exception e1) {
+			try {
+				servletResponse.sendRedirect("/WebProj");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	
-	
 	@GET
 	@Path("/adminRezervacije")
 	public void adminRezervacije() {
 		try {
-			servletRequest.getRequestDispatcher("/WEB-INF/adminRezervacije.html").forward(servletRequest,
-					servletResponse);
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			if (k == null || !k.getUloga().equals("Administrator")) {
+				servletResponse.sendRedirect("/WebProj");
+			} else {
+				servletRequest.getRequestDispatcher("/WEB-INF/adminRezervacije.html").forward(servletRequest,
+						servletResponse);
+			}
 		} catch (Exception e1) {
+			try {
+				servletResponse.sendRedirect("/WebProj");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -91,16 +109,15 @@ public class RezervacijaKontroller {
 		if (korisnik == null) {
 			return Response.status(403).build();
 		}
-		
-		Apartman apartman;	
-		
+
+		Apartman apartman;
+
 		try {
 			apartman = apartmani.get().get(request.getApartmanId());
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			return Response.status(400).build();
 		}
-		
+
 		Rezervacija novaLokacija = new Rezervacija(request, apartman, korisnik);
 		rezervacije.add(novaLokacija);
 
@@ -108,25 +125,25 @@ public class RezervacijaKontroller {
 	}
 
 	@GET
-	@Path("/{id}")
-	public void getRezervacijaPage(@PathParam("id") int id) {
-		try {
-			servletRequest.getRequestDispatcher("/WEB-INF/rezervacija.html").forward(servletRequest, servletResponse);
-		} catch (Exception e1) {
-		}
-	}
-
-	
-	@GET
 	@Path("/domacinRezervacije")
 	public void domacinRezervacije() {
 		try {
-			servletRequest.getRequestDispatcher("/WEB-INF/domacinRezervacije.html").forward(servletRequest,
-					servletResponse);
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			if (k == null || !k.getUloga().equals("Domaćin")) {
+				servletResponse.sendRedirect("/WebProj");
+			} else {
+				servletRequest.getRequestDispatcher("/WEB-INF/domacinRezervacije.html").forward(servletRequest,
+						servletResponse);
+			}
 		} catch (Exception e1) {
+			try {
+				servletResponse.sendRedirect("/WebProj");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	@GET
 	@Path("/ostaviKomentar/{id}")
 	public void ostaviKomentar() {
@@ -136,46 +153,46 @@ public class RezervacijaKontroller {
 		} catch (Exception e1) {
 		}
 	}
-	
+
 	@PUT
 	@Path("/{id}/komentar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response dodajKomentar(@PathParam("id") int id, KomentarRequest request) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
-		
+
 		rezervacija.setKomentar(request.getKomentar());
 		rezervacija.setOcena(request.getOcena());
 		rezervacija.setPrikazatiKomentar(false);
-		
+
 		rezervacije.refresh();
-		
+
 		return Response.ok().build();
 	}
-	
+
 	@PUT
 	@Path("/{id}/odobriKomentar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response odobriKomentar(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
-		
+
 		rezervacija.setPrikazatiKomentar(true);
 		rezervacije.refresh();
-		
+
 		return Response.ok().build();
 	}
-	
+
 	@PUT
 	@Path("/{id}/sakrijKomentar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sakrijKomentar(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
-		
+
 		rezervacija.setPrikazatiKomentar(false);
 		rezervacije.refresh();
-		
+
 		return Response.ok().build();
 	}
 
@@ -191,8 +208,9 @@ public class RezervacijaKontroller {
 		Rezervacija rezervacija = rezervacije.get().get(id);
 		Korisnik gost = korisnici.get().get(rezervacija.getGostId());
 		Apartman apartman = apartmani.get().get(rezervacija.getApartmanId());
+		Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
 
-		RezervacijaResponse response = new RezervacijaResponse(rezervacija, gost, apartman);
+		RezervacijaResponse response = new RezervacijaResponse(rezervacija, gost, domacin, apartman);
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
 
@@ -200,6 +218,11 @@ public class RezervacijaKontroller {
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getRezervacije() {
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		if (korisnik == null) {
+			return Response.status(403).build();
+		}
+
 		List<RezervacijaResponse> response = new ArrayList<>();
 
 		DAL<Rezervacija> rezervacije = rezervacije(application);
@@ -213,13 +236,18 @@ public class RezervacijaKontroller {
 
 			Korisnik gost = korisnici.get().get(rezervacija.getGostId());
 			Apartman apartman = apartmani.get().get(rezervacija.getApartmanId());
-			RezervacijaResponse rezervacijaReposne = new RezervacijaResponse(rezervacija, gost, apartman);
-			response.add(rezervacijaReposne);
+			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
+			RezervacijaResponse rezervacijaReposne = new RezervacijaResponse(rezervacija, gost, domacin, apartman);
+			if ((korisnik.getUloga().equals("Korisnik") && korisnik.getId() == gost.getId())
+					|| (korisnik.getUloga().equals("Domaćin") && korisnik.getId() == domacin.getId())
+					|| korisnik.getUloga().equals("Administrator")) {
+				response.add(rezervacijaReposne);
+			}
 		}
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	@PUT
 	@Path("/{id}/zavrsi")
 	@Consumes(MediaType.APPLICATION_JSON)

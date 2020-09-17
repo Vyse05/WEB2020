@@ -29,7 +29,10 @@ $(window)
 														'<li><a href="/WebProj/rest/apartman/nov">Nov Apartman</a>&nbsp;&nbsp;</li>');
 										$('#korisnicki')
 										.append(
-												'<li><a href="/WebProj/rest/rezervacija/domacinRezervacije">Domacin Rezervacije</a>&nbsp;&nbsp;</li>');
+												'<li><a href="/WebProj/rest/rezervacija/domacinRezervacije">Rezervacije</a>&nbsp;&nbsp;</li>');
+										$('#korisnicki')
+										.append(
+												'<li><a href="/WebProj/rest/korisnik/korisniciDomacin">Gosti</a>&nbsp;&nbsp;</li>');
 									}
 									if (data.uloga == 'Administrator') {
 										$('#korisnicki')
@@ -40,7 +43,7 @@ $(window)
 														'<li><a href="/WebProj/rest/korisnik/korisnici">Korisnici</a>&nbsp;&nbsp;</li>');
 										$('#korisnicki')
 										.append(
-												'<li><a href="/WebProj/rest/rezervacija/gostRezervacije">Sve Rezervacije</a></li>&nbsp;&nbsp;');
+												'<li><a href="/WebProj/rest/rezervacija/adminRezervacije">Sve Rezervacije</a></li>&nbsp;&nbsp;');
 									}
 
 									if (data.uloga == 'Korisnik') {

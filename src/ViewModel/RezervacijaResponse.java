@@ -16,12 +16,14 @@ public class RezervacijaResponse {
 	private String poruka;
 	private Integer gostId;
 	private String gost;
+	private Integer domacinId;
+	private String domacin;
 	private String status;
 	private String komentar;
 	private Integer ocena;
 	private Boolean prikazatiKomentar;
 
-	public RezervacijaResponse(Rezervacija rezervacija, Korisnik gost, Apartman apartman) {
+	public RezervacijaResponse(Rezervacija rezervacija, Korisnik gost, Korisnik domacin, Apartman apartman) {
 		super();
 		this.id = rezervacija.getId();
 		this.apartmanId = rezervacija.getApartmanId();
@@ -33,6 +35,8 @@ public class RezervacijaResponse {
 		this.poruka = rezervacija.getPoruka();
 		this.gostId = rezervacija.getGostId();
 		this.gost = gost.getIme() + " " + gost.getPrezime();
+		this.domacinId = domacin.getId();
+		this.domacin = domacin.getIme() + " " + domacin.getPrezime();
 		this.status = rezervacija.getStatus();
 		this.komentar = rezervacija.getKomentar();
 		this.ocena = rezervacija.getOcena();
@@ -141,5 +145,21 @@ public class RezervacijaResponse {
 
 	public void setPrikazatiKomentar(Boolean prikazatiKomentar) {
 		this.prikazatiKomentar = prikazatiKomentar;
+	}
+
+	public Integer getDomacinId() {
+		return domacinId;
+	}
+
+	public void setDomacinId(Integer domacinId) {
+		this.domacinId = domacinId;
+	}
+
+	public String getDomacin() {
+		return domacin;
+	}
+
+	public void setDomacin(String domacin) {
+		this.domacin = domacin;
 	}
 }

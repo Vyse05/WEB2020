@@ -42,16 +42,6 @@ input[type=number], select {
 	box-sizing: border-box;
 }
 
-input[type=date], select {
-	width: 30%;
-	padding: 12px 20px;
-	margin: 8px 0;
-	display: inline-block;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
 input[type=password], select {
 	width: 30%;
 	padding: 12px 20px;
@@ -77,22 +67,29 @@ test {
 	border-radius: 5px;
 }
 </style>
-<meta charset="UTF-8">
-<link rel="shortcut icon" href="">
+<meta charset="ISO-8859-1">
+<link
+	href="https://unpkg.com/tabulator-tables@4.8.0/dist/css/tabulator_modern.min.css"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="https://unpkg.com/tabulator-tables@4.8.0/dist/js/tabulator.min.js"></script>
 
 <script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
-<script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
-<script type="text/javascript" src="/WebProj/Scripts/rezervacija.js"></script>
 
-<title>WebProj</title>
+<script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
+
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="/WebProj/Scripts/korisniciDomacin.js"></script>
+<title>Svi gosti</title>
 </head>
 <body>
-<div id='header'></div><br/>
-<div id='sadrzaj'>
-	<h1>Rezervacija</h1>
-	<span>Apartman</span><br/>
-	<a id="apartman"></a>
-	<br/><br/>
-</div>
+	<div id='header'></div>
+
+	<div class="container">
+		<br>
+		<h1>Svi gosti</h1>
+		<div id="tabela-korisnika"></div>
+	</div>
 </body>
 </html>

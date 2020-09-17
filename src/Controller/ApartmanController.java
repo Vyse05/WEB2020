@@ -57,6 +57,23 @@ public class ApartmanController {
 	@GET
 	@Path("/nov")
 	public void novPage() {
+		Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		if (k == null) {
+			try {
+				servletResponse.sendRedirect("/WebProj/rest/korisnik/login");
+				return;
+			} catch (IOException e) {
+			}
+		}
+		
+		if (!k.getUloga().equals("Domaćin")) {
+			try {
+				servletResponse.sendRedirect("/WebProj");
+				return;
+			} catch (IOException e) {
+			}
+		}
+		
 		try {
 			servletRequest.getRequestDispatcher("/WEB-INF/novApartman.html").forward(servletRequest, servletResponse);
 		} catch (Exception e1) {
@@ -65,7 +82,7 @@ public class ApartmanController {
 
 	@GET
 	@Path("/komentari/{id}")
-	public void komentarPage() {
+	public void komentarPage(@PathParam("id") int id) {		
 		try {
 			servletRequest.getRequestDispatcher("/WEB-INF/komentari.html").forward(servletRequest, servletResponse);
 		} catch (Exception e1) {
@@ -75,14 +92,10 @@ public class ApartmanController {
 	@POST
 	@Path("/nov")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void nov(ApartmanRequest request) {
+	public Response nov(ApartmanRequest request) {
 		Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		if (k == null) {
-			try {
-				servletResponse.sendRedirect("/WebProj/rest/korisnik/login");
-				return;
-			} catch (IOException e) {
-			}
+		if (k == null || !k.getUloga().equals("Domaćin")) {
+			return Response.status(Status.FORBIDDEN).build();
 		}
 		DAL<Apartman> apartmani = apartmani(application);
 
@@ -91,6 +104,8 @@ public class ApartmanController {
 				request.getPostanskiBroj(), request.getBrojSoba(), request.getBrojGostiju(), request.getCena(),
 				request.getVremeZaPrijavu(), request.getVremeZaOdjavu(), true);
 		apartmani.add(novaLokacija);
+		
+		return Response.ok().build();
 	}
 
 	@GET
@@ -123,7 +138,7 @@ public class ApartmanController {
 		DAL<Korisnik> korisnici = korisnici(application);
 		Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		Boolean canEdit = korisnik != null && korisnik.getId() == domacin.getId();
+		Boolean canEdit = korisnik != null && (korisnik.getId() == domacin.getId() ||  korisnik.getUloga().equals("Administrator"));
 		ApartmanResponse response = new ApartmanResponse(apartman, domacin, canEdit);
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		for (Rezervacija rezervacija : rezervacije.get()) {
@@ -148,7 +163,6 @@ public class ApartmanController {
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response izmeniApartman(@PathParam("id") int id, ApartmanRequest request) {
-
 		DAL<Apartman> apartmani = apartmani(application);
 
 		Apartman apartman;
@@ -160,6 +174,12 @@ public class ApartmanController {
 
 		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+		
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Boolean canEdit = korisnik != null && (korisnik.getId() == apartman.getDomacinId() ||  korisnik.getUloga().equals("Administrator"));
+		if(!canEdit) {
+			return Response.status(Status.FORBIDDEN).build(); 
 		}
 		
 		apartman.setBroj(request.getBroj());
@@ -271,7 +291,7 @@ public class ApartmanController {
 			}
 
 			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
-			Boolean canEdit = korisnik != null && korisnik.getId() == domacin.getId();
+			Boolean canEdit = korisnik != null && (korisnik.getId() == domacin.getId() || korisnik.getUloga().equals("Administrator"));
 			ApartmanResponse apartmanResponse = new ApartmanResponse(apartman, domacin, canEdit);
 
 			for (Rezervacija rezervacija : rezervacije.get()) {
@@ -311,6 +331,12 @@ public class ApartmanController {
 		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
+
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Boolean canEdit = korisnik != null && (korisnik.getId() == apartman.getDomacinId() ||  korisnik.getUloga().equals("Administrator"));
+		if(!canEdit) {
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
 		
 		apartman.setRemoved(true);
 		apartmani.refresh();
@@ -334,6 +360,12 @@ public class ApartmanController {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 		
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Boolean canEdit = korisnik != null && (korisnik.getId() == apartman.getDomacinId() ||  korisnik.getUloga().equals("Administrator"));
+		if(!canEdit) {
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
+		
 		apartman.setAktivno(false);
 		apartmani.refresh();
 		
@@ -354,6 +386,12 @@ public class ApartmanController {
 
 		if (apartman == null || apartman.getRemoved()) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
+		}
+		
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		Boolean canEdit = korisnik != null && (korisnik.getId() == apartman.getDomacinId() ||  korisnik.getUloga().equals("Administrator"));
+		if(!canEdit) {
+			return Response.status(Status.FORBIDDEN).build(); 
 		}
 		
 		apartman.setAktivno(true);

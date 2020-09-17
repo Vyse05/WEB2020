@@ -51,9 +51,21 @@ $(window)
 											hozAlign : "center",
 										},
 										{
+											title : "Gost",
+											field : "gost",
+										},
+										{
+											title : "Domaćin",
+											field : "domacin",
+										},
+										{
 											title : "Poruka",
 											field : "poruka",
-										}, ],
+										}, 
+										{
+											title : "Status",
+											field : "status",
+										},],
 							});
 					//table.setFilter("gostId", "=", "username"); 
 				});

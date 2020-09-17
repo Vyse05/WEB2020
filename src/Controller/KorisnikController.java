@@ -20,7 +20,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import Admin.Administratori;
+import Model.Apartman;
 import Model.Korisnik;
+import Model.Rezervacija;
 import Util.DAL;
 import ViewModel.ErrorResponse;
 import ViewModel.LoginRequest;
@@ -38,14 +40,15 @@ public class KorisnikController {
 	HttpServletResponse response;
 
 	private DAL<Korisnik> korisnici(ServletContext application) {
-		@SuppressWarnings("unchecked")
-		DAL<Korisnik> korisnici = (DAL<Korisnik>) application.getAttribute("korisnici");
-		if (korisnici == null) {
-			korisnici = new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
-			application.setAttribute("korisnici", korisnici);
-		}
+		return new DAL<Korisnik>(Korisnik.class, application.getRealPath("") + "korisnici.txt");
+	}
 
-		return korisnici;
+	private DAL<Rezervacija> rezervacije(ServletContext application) {
+		return new DAL<Rezervacija>(Rezervacija.class, application.getRealPath("") + "rezervacije.txt");
+	}
+
+	private DAL<Apartman> apartmani(ServletContext application) {
+		return new DAL<Apartman>(Apartman.class, application.getRealPath("") + "apartmani.txt");
 	}
 
 	private List<Korisnik> administratori(ServletContext application) {
@@ -76,11 +79,29 @@ public class KorisnikController {
 	public void getKorisniciPage() {
 		try {
 			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-			if (k == null) {
+			if (k == null || !k.getUloga().equals("Administrator")) {
 				response.sendRedirect("/WebProj");
-
 			} else {
 				servletRequest.getRequestDispatcher("/WEB-INF/korisnici.html").forward(servletRequest, response);
+			}
+		} catch (Exception e1) {
+			try {
+				response.sendRedirect("/WebProj");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@GET
+	@Path("/korisniciDomacin")
+	public void getKorisniciDomacin() {
+		try {
+			Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+			if (k == null || !k.getUloga().equals("Domaćin")) {
+				response.sendRedirect("/WebProj");
+			} else {
+				servletRequest.getRequestDispatcher("/WEB-INF/korisniciDomacin.html").forward(servletRequest, response);
 			}
 		} catch (Exception e1) {
 			try {
@@ -234,8 +255,8 @@ public class KorisnikController {
 	@Path("/{id}/domacin")
 	public Response domacin(@PathParam("id") int id) {
 		Korisnik admin = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		if (admin == null || admin.getUloga().equals("Administrator")) {
-			// return Response.status(403).build();
+		if (admin == null || !admin.getUloga().equals("Administrator")) {
+			return Response.status(403).build();
 		}
 
 		DAL<Korisnik> korisnici = korisnici(application);
@@ -254,7 +275,13 @@ public class KorisnikController {
 	@GET
 	@Path("/svi")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getKorisnici() {
+	public Response getSviKorisnici() {
+
+		Korisnik admin = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		if (admin == null || !admin.getUloga().equals("Administrator")) {
+			return Response.status(403).build();
+		}
+
 		DAL<Korisnik> korisnici = korisnici(application);
 		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
 
@@ -264,6 +291,43 @@ public class KorisnikController {
 			}
 
 			response.add(new UserInfoResponse(korisnik));
+		}
+
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	@Path("/sviDomacin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSviKorisniciDomacin() {
+		Korisnik domacin = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		if (domacin == null || !domacin.getUloga().equals("Domaćin")) {
+			return Response.status(403).build();
+		}
+
+		DAL<Korisnik> korisnici = korisnici(application);
+		DAL<Apartman> apartmani = apartmani(application);
+		DAL<Rezervacija> rezervacije = rezervacije(application);
+		List<UserInfoResponse> response = new ArrayList<UserInfoResponse>();
+
+		for (Korisnik korisnik : korisnici.get()) {
+			Boolean dodaj = false;
+			
+			for (Rezervacija rezervacija : rezervacije.get()) {
+				try {
+					Apartman apartman = apartmani.get().get(rezervacija.getApartmanId());
+					if (apartman.getDomacinId() == domacin.getId()  && rezervacija.getGostId() == korisnik.getId()) {
+						dodaj = true;
+						break;
+					}
+				} catch (Exception e) {
+					continue;
+				}
+			}
+			
+			if (dodaj) {
+				response.add(new UserInfoResponse(korisnik));
+			}
 		}
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
