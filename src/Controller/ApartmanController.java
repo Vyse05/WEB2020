@@ -30,6 +30,7 @@ import Model.Sadrzaj;
 import Util.DAL;
 import ViewModel.ApartmanRequest;
 import ViewModel.ApartmanResponse;
+import ViewModel.DostupniRequest;
 import ViewModel.ErrorResponse;
 import ViewModel.KomentarResponse;
 
@@ -97,6 +98,7 @@ public class ApartmanController {
 	@POST
 	@Path("/nov")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response nov(ApartmanRequest request) {
 		Korisnik k = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
 		if (k == null || !k.getUloga().equals("Domaćin")) {
@@ -179,6 +181,7 @@ public class ApartmanController {
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response izmeniApartman(@PathParam("id") int id, ApartmanRequest request) {
 		DAL<Apartman> apartmani = apartmani(application);
 
@@ -343,10 +346,77 @@ public class ApartmanController {
 
 		return Response.ok(response, MediaType.APPLICATION_JSON).build();
 	}
+	
+	@POST
+	@Path("/dostupni")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDostupni(DostupniRequest request) {
+		List<ApartmanResponse> response = new ArrayList<>();
+
+		DAL<Apartman> apartmani = apartmani(application);
+		DAL<Korisnik> korisnici = korisnici(application);
+		DAL<Sadrzaj> sadrzajiRepo = sadrzaji(application);
+		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
+		DAL<Rezervacija> rezervacijeRepo = rezervacije(application);
+
+		for (Apartman apartman : apartmani.get()) {
+			if (apartman.getRemoved()) {
+				continue;
+			}
+
+			List<Rezervacija> rezervacije = new ArrayList<>();
+			for (Rezervacija rezervacija : rezervacijeRepo.get()) {
+				if (rezervacija.getApartmanId() == apartman.getId() && !rezervacija.getStatus().equals("ODBIJENA")) {
+					rezervacije.add(rezervacija);
+				}
+			}
+
+			Boolean slobodan = slobodan(rezervacije, request.getStartDate(), request.getEndDate());
+			
+			if(!slobodan) {
+				continue;
+			}
+			
+			Korisnik domacin = korisnici.get().get(apartman.getDomacinId());
+			Boolean canEdit = korisnik != null
+					&& (korisnik.getId() == domacin.getId() || korisnik.getUloga().equals("Administrator"));
+			
+			List<Sadrzaj> sadrzaji = new ArrayList<>();
+			for (Integer sadrzajId : apartman.getSadrzajIds()) {
+				try {
+					sadrzaji.add(sadrzajiRepo.get().get(sadrzajId));
+				} catch (Exception e) {
+				}
+			}
+			
+			ApartmanResponse apartmanResponse = new ApartmanResponse(apartman, domacin, canEdit, sadrzaji);
+
+			for (Rezervacija rezervacija : rezervacijeRepo.get()) {
+				if (rezervacija.getApartmanId() != apartman.getId() || rezervacija.getStatus().equals("ODBIJENA")) {
+					continue;
+				}
+				apartmanResponse.getUnavailable()
+						.add(new SimpleDateFormat("dd-MM-yyyy").format(rezervacija.getPocetniDatumRezervacije()));
+				for (int i = 1; i < rezervacija.getBrojNocenja(); i++) {
+					Calendar c = Calendar.getInstance();
+					c.setTime(rezervacija.getPocetniDatumRezervacije());
+					c.add(Calendar.DATE, i);
+					Date newDate = c.getTime();
+					apartmanResponse.getUnavailable().add(new SimpleDateFormat("dd-MM-yyyy").format(newDate));
+				}
+			}
+
+			response.add(apartmanResponse);
+		}
+
+		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+	}
 
 	@DELETE
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response brisanje(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
 
@@ -377,6 +447,7 @@ public class ApartmanController {
 	@PUT
 	@Path("/{id}/deaktiviraj")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response deaktiviraj(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
 		Apartman apartman;
@@ -406,6 +477,7 @@ public class ApartmanController {
 	@PUT
 	@Path("/{id}/aktiviraj")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response aktiviraj(@PathParam("id") int id) {
 		DAL<Apartman> apartmani = apartmani(application);
 		Apartman apartman;
@@ -430,5 +502,22 @@ public class ApartmanController {
 		apartmani.refresh();
 
 		return Response.ok().build();
+	}
+
+	private Boolean slobodan(List<Rezervacija> rezervacije, Date startDate, Date endDate) {
+
+		for (Rezervacija rezervacija : rezervacije) {
+			for (int i = 0; i < rezervacija.getBrojNocenja(); i++) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(rezervacija.getPocetniDatumRezervacije());
+				c.add(Calendar.DATE, i);
+				Date newDate = c.getTime();
+
+				if (newDate.compareTo(startDate) >= 0 && newDate.compareTo(endDate) <= 0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

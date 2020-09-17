@@ -1,6 +1,9 @@
 package Controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -101,9 +104,10 @@ public class RezervacijaKontroller {
 	@POST
 	@Path("/nov")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response nov(RezervacijaRequest request) {
 		Korisnik korisnik = (Korisnik) servletRequest.getSession().getAttribute("korisnik");
-		DAL<Rezervacija> rezervacije = rezervacije(application);
+		DAL<Rezervacija> rezervacijeRepo = rezervacije(application);
 		DAL<Apartman> apartmani = apartmani(application);
 
 		if (korisnik == null) {
@@ -115,11 +119,29 @@ public class RezervacijaKontroller {
 		try {
 			apartman = apartmani.get().get(request.getApartmanId());
 		} catch (Exception exception) {
-			return Response.status(400).build();
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman ne postoji.")).build();
 		}
 
+		List<Rezervacija> rezervacije = new ArrayList<>();
+		for (Rezervacija rezervacija : rezervacijeRepo.get()) {
+			if (rezervacija.getApartmanId() == apartman.getId() && !rezervacija.getStatus().equals("ODBIJENA")) {
+				rezervacije.add(rezervacija);
+			}
+		}
+
+		Calendar c = Calendar.getInstance();
+
+		c.setTime(request.getPocetniDatumRezervacije());
+		c.add(Calendar.DATE, request.getBrojNocenja() - 1);
+		Date endDate = c.getTime();
+		Boolean slobodan = slobodan(rezervacije, request.getPocetniDatumRezervacije(), endDate);
+		
+		if(!slobodan) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorResponse("Apartman nije slobodan za zadati broj noćenja.")).build();
+		}
+		
 		Rezervacija novaLokacija = new Rezervacija(request, apartman, korisnik);
-		rezervacije.add(novaLokacija);
+		rezervacijeRepo.add(novaLokacija);
 
 		return Response.ok().build();
 	}
@@ -251,6 +273,7 @@ public class RezervacijaKontroller {
 	@PUT
 	@Path("/{id}/zavrsi")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response zavrsi(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
@@ -267,6 +290,7 @@ public class RezervacijaKontroller {
 	@PUT
 	@Path("/{id}/odbij")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response odbij(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
@@ -283,6 +307,7 @@ public class RezervacijaKontroller {
 	@PUT
 	@Path("/{id}/prihvati")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response prihvati(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
@@ -299,6 +324,7 @@ public class RezervacijaKontroller {
 	@PUT
 	@Path("/{id}/odustani")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response odustani(@PathParam("id") int id) {
 		DAL<Rezervacija> rezervacije = rezervacije(application);
 		Rezervacija rezervacija = rezervacije.get().get(id);
@@ -310,5 +336,22 @@ public class RezervacijaKontroller {
 		rezervacije.refresh();
 
 		return Response.ok().build();
+	}
+
+	private Boolean slobodan(List<Rezervacija> rezervacije, Date startDate, Date endDate) {
+
+		for (Rezervacija rezervacija : rezervacije) {
+			for (int i = 0; i < rezervacija.getBrojNocenja(); i++) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(rezervacija.getPocetniDatumRezervacije());
+				c.add(Calendar.DATE, i);
+				Date newDate = c.getTime();
+
+				if (newDate.compareTo(startDate) >= 0 && newDate.compareTo(endDate) <= 0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

@@ -82,7 +82,8 @@ $(document).on(
 					success : function() {
 						$("#snimljeno").show();
 					},
-					error : function(XMLHttpRequest, textStatus, errorThrown) {
+					error : function(xhr, status) {
+						$("#errorSnimljeno").html("Nije snimljeno: "+$.parseJSON(xhr.responseText).error);
 						$("#errorSnimljeno").show();
 					}
 				});
