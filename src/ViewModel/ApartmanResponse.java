@@ -5,6 +5,7 @@ import java.util.List;
 
 import Model.Apartman;
 import Model.Korisnik;
+import Model.Sadrzaj;
 
 public class ApartmanResponse {
 	private String tip;
@@ -24,9 +25,10 @@ public class ApartmanResponse {
 	private Integer vremeZaOdjavu;
 	private Boolean canEdit;
 	private Boolean aktivno;
-	private List<String> unavailable; 
+	private List<String> unavailable;
+	private List<SadrzajResponse> sadrzaji;
 
-	public ApartmanResponse(Apartman apartman, Korisnik domacin, Boolean canEdit) {
+	public ApartmanResponse(Apartman apartman, Korisnik domacin, Boolean canEdit, List<Sadrzaj> sadrzaji) {
 		super();
 		this.tip = apartman.getTip();
 		this.id = apartman.getId();
@@ -43,6 +45,12 @@ public class ApartmanResponse {
 		this.cena = apartman.getCena();
 		this.vremeZaPrijavu = apartman.getVremeZaPrijavu();
 		this.vremeZaOdjavu = apartman.getVremeZaOdjavu();
+
+		this.sadrzaji = new ArrayList<>();
+		for (Sadrzaj sadrzaj : sadrzaji) {
+			this.sadrzaji.add(new SadrzajResponse(sadrzaj));
+		}
+
 		this.setAktivno(apartman.getAktivno());
 		this.canEdit = canEdit;
 	}
@@ -176,7 +184,7 @@ public class ApartmanResponse {
 	}
 
 	public List<String> getUnavailable() {
-		if(unavailable == null) {
+		if (unavailable == null) {
 			unavailable = new ArrayList<>();
 		}
 		return unavailable;
@@ -192,5 +200,16 @@ public class ApartmanResponse {
 
 	public void setAktivno(Boolean aktivno) {
 		this.aktivno = aktivno;
+	}
+
+	public List<SadrzajResponse> getSadrzaji() {
+		if(sadrzaji == null) {
+			sadrzaji = new ArrayList<>();
+		}
+		return sadrzaji;
+	}
+
+	public void setSadrzaji(List<SadrzajResponse> sadrzaji) {
+		this.sadrzaji = sadrzaji;
 	}
 }

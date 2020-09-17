@@ -1,5 +1,8 @@
 package ViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ApartmanRequest {
 	private String tip;
 	private String geografskaSirina;
@@ -13,6 +16,7 @@ public class ApartmanRequest {
 	private Integer cena;
 	private Integer vremeZaPrijavu;
 	private Integer vremeZaOdjavu;
+	private List<Integer> sadrzajIds;
 
 	public String getTip() {
 		return tip;
@@ -108,5 +112,16 @@ public class ApartmanRequest {
 
 	public void setVremeZaOdjavu(Integer vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
+	}
+
+	public List<Integer> getSadrzajIds() {
+		if(sadrzajIds==null) {
+			sadrzajIds = new ArrayList<>();
+		}
+		return sadrzajIds;
+	}
+
+	public void setSadrzajIds(List<Integer> sadrzajIds) {
+		this.sadrzajIds = sadrzajIds;
 	}
 }

@@ -86,7 +86,7 @@ function formToJSON(tip, geografskaSirina, geografskaDuzina, ulica,
 		"brojGostiju": brojGostiju,
 		"cena": cena,
 		"vremeZaPrijavu": vremeZaPrijavu,
-		"vremeZaOdjavu": vremeZaOdjavu
-		
+		"vremeZaOdjavu": vremeZaOdjavu,
+		"sadrzajIds":[1,2,3]
 	});
 }

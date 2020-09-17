@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import Util.Removable;
@@ -19,8 +21,11 @@ public class Apartman extends Removable {
 	private Integer vremeZaPrijavu;
 	private Integer vremeZaOdjavu;
 	private Boolean aktivno;
+	private List<Integer> sadrzajIds;
 
 	public Apartman(Integer id, String apartman) {
+		sadrzajIds = new ArrayList<>();
+
 		setId(id);
 		StringTokenizer tokenizer = new StringTokenizer(apartman, ";");
 		setRemoved(tokenizer.nextToken().trim().equals("true"));
@@ -38,12 +43,22 @@ public class Apartman extends Removable {
 		cena = Integer.parseInt(tokenizer.nextToken().trim());
 		vremeZaPrijavu = Integer.parseInt(tokenizer.nextToken().trim());
 		vremeZaOdjavu = Integer.parseInt(tokenizer.nextToken().trim());
+		String sadrzajiTemp = tokenizer.nextToken().trim();
+		StringTokenizer sadrzajiTokenizer = new StringTokenizer(sadrzajiTemp, ",");
+		while(true) {
+			try {
+				sadrzajIds.add(Integer.parseInt(sadrzajiTokenizer.nextToken().trim()));
+			} catch (Exception e) {
+				break;
+			}	
+		}
+
 		aktivno = tokenizer.nextToken().trim().equals("true");
 	}
 
-	public Apartman(String tip, Integer domacinId, String geografskaSirina, String geografskaDuzina, String ulica, String broj,
-			String naseljenoMesto, String postanskiBroj, Integer brojSoba, Integer brojGostiju, Integer cena,
-			Integer vremeZaPrijavu, Integer vremeZaOdjavu, Boolean aktivno) {
+	public Apartman(String tip, Integer domacinId, String geografskaSirina, String geografskaDuzina, String ulica,
+			String broj, String naseljenoMesto, String postanskiBroj, Integer brojSoba, Integer brojGostiju,
+			Integer cena, Integer vremeZaPrijavu, Integer vremeZaOdjavu, List<Integer> sadrzajIds, Boolean aktivno) {
 		super();
 		this.tip = tip;
 		this.domacinId = domacinId;
@@ -59,14 +74,26 @@ public class Apartman extends Removable {
 		this.vremeZaPrijavu = vremeZaPrijavu;
 		this.vremeZaOdjavu = vremeZaOdjavu;
 		this.aktivno = aktivno;
+		this.sadrzajIds = sadrzajIds;
 		setRemoved(false);
 	}
 
 	@Override
 	public String toString() {
-		return getRemoved() + ";" + tip + ";" + domacinId + ";" + geografskaSirina + ";" + geografskaDuzina + ";" + ulica + ";" + broj
-				+ ";" + naseljenoMesto + ";" + postanskiBroj + ";" + brojSoba + ";" + brojGostiju + ";" + cena + ";"
-				+ vremeZaPrijavu + ";" + vremeZaOdjavu + ";" + aktivno;
+		String result = getRemoved() + ";" + tip + ";" + domacinId + ";" + geografskaSirina + ";" + geografskaDuzina
+				+ ";" + ulica + ";" + broj + ";" + naseljenoMesto + ";" + postanskiBroj + ";" + brojSoba + ";"
+				+ brojGostiju + ";" + cena + ";" + vremeZaPrijavu + ";" + vremeZaOdjavu + ";";
+		
+		if(sadrzajIds.size()>0) {
+			result = result + sadrzajIds.get(0);
+			
+			for (int i=1; i<sadrzajIds.size(); i++) {
+				result = result + "," + sadrzajIds.get(i);
+			}
+		}
+
+		result = result + ";" + aktivno;
+		return result;
 	}
 
 	public String getTip() {
@@ -179,5 +206,16 @@ public class Apartman extends Removable {
 
 	public void setDomacinId(Integer domacinId) {
 		this.domacinId = domacinId;
+	}
+
+	public List<Integer> getSadrzajIds() {
+		if (sadrzajIds == null) {
+			sadrzajIds = new ArrayList<>();
+		}
+		return sadrzajIds;
+	}
+
+	public void setSadrzajIds(List<Integer> sadrzajIds) {
+		this.sadrzajIds = sadrzajIds;
 	}
 }
