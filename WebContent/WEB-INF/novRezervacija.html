@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
+	
+	<!--	link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
+		<	script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+		<	script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script -->
+		
 		<style>
             ul {
                 list-style-type: none;
@@ -83,12 +87,13 @@
             }
         </style>
 		<meta charset="UTF-8" />
-		<link rel="shortcut icon" href="" />
+		<link rel="stylesheet" type="text/css" href="/WebProj/Scripts/bootstrap-datepicker.css" />
 		<script type="text/javascript" src="/WebProj/Scripts/jquery.min.js"></script>
 		<script type="text/javascript" src="/WebProj/Scripts/navigacija.js"></script>
 		<script type="text/javascript" src="/WebProj/Scripts/novRezervacija.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+		<script type="text/javascript" src="/WebProj/Scripts/bootstrap-datepicker.js"></script>
+		<script type="text/javascript" src="/WebProj/Scripts/moment.js"></script>
+
 		<title>WebProj</title>
 	</head>
 	<body>
@@ -104,6 +109,8 @@
 				<br />
 				<input type="number" placeholder="Broj noćenja" id="brojNocenja" />
 				<span id="errorBrojNocenja" hidden="true">Niste uneli broj noćenja.</span>
+				<span id="errorBrojNocenja2" hidden="true">Broj noćenja nije validan.</span>
+				
 				<br />
 				<br />
 				<span>Poruka</span>

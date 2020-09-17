@@ -121,14 +121,16 @@ $(window)
 						// passes the
 						// filter.
 					}
-					
+
 					var table = new Tabulator(
 							"#neulogovan-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
-								initialFilter:[
-								               {field:"aktivno", type:"like", value:"true"}
-								           ],
+								initialFilter : [ {
+									field : "aktivno",
+									type : "like",
+									value : "true"
+								} ],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -171,21 +173,6 @@ $(window)
 											headerFilterPlaceholder : "at least...",
 											headerFilterFunc : ">="
 										},
-										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Odlaska",
-											field : "dob2",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-
 										{
 											formatter : komentarFormat,
 											title : "Komentari",
@@ -202,9 +189,12 @@ $(window)
 							"#korisnik-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
-								initialFilter:[
-								               {field:"aktivno", type:"like", value:"true"}
-								           ],
+								initialFilter : [ {
+									field : "aktivno",
+									type : "like",
+									value : "true"
+								},
+								],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -245,20 +235,6 @@ $(window)
 											hozAlign : "center",
 											headerFilter : "number",
 											headerFilterPlaceholder : "at least...",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Odlaska",
-											field : "dob2",
-											hozAlign : "center",
-											sorter : "date",
 											headerFilterFunc : ">="
 										},
 										{
@@ -288,9 +264,15 @@ $(window)
 							"#domacin-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
-								initialFilter:[
-								               {field:"aktivno", type:"like", value:"true"}
-								           ],
+								initialFilter : [ {
+									field : "aktivno",
+									type : "like",
+									value : "true"
+								},{
+									field: "canEdit",
+									type: "like",
+									value: "true"
+								} ],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -334,20 +316,6 @@ $(window)
 											headerFilterFunc : ">="
 										},
 										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Odlaska",
-											field : "dob2",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-										{
 											formatter : komentarFormat,
 											title : "Komentari",
 											hozAlign : "center",
@@ -359,7 +327,14 @@ $(window)
 										},
 
 										{
-											formatter : izmeniFormat,
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().canEdit == true) {
+													return "<label>Izmeni</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Izmeni",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
@@ -369,15 +344,21 @@ $(window)
 											}
 										}, ],
 							});
-					
+
 					var table = new Tabulator(
 							"#domacin-table2",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
 								// URL
-								initialFilter:[
-								               {field:"aktivno", type:"like", value:"false"}
-								           ],
+								initialFilter : [ {
+									field : "aktivno",
+									type : "like",
+									value : "false"
+								},{
+									field: "canEdit",
+									type: "like",
+									value: "true"
+								} ],
 								height : "311px",
 								pagination : "local",
 								layout : "fitColumns",
@@ -394,7 +375,7 @@ $(window)
 										{
 											title : "Cena",
 											field : "cena",
-											hozAlign : "center",		
+											hozAlign : "center",
 										},
 										{
 											title : "Broj Soba",
@@ -407,16 +388,6 @@ $(window)
 											hozAlign : "center",
 										},
 										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-										},
-										{
-											title : "Datum Odlaska",
-											field : "dob2",
-											hozAlign : "center",
-										},
-										{
 											formatter : komentarFormat,
 											title : "Komentari",
 											hozAlign : "center",
@@ -426,9 +397,15 @@ $(window)
 																.getData().id;
 											}
 										},
-
 										{
-											formatter : izmeniFormat,
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().canEdit == true) {
+													return "<label>Izmeni</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Izmeni",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
@@ -438,7 +415,7 @@ $(window)
 											}
 										}, ],
 							});
-					
+
 					var table = new Tabulator(
 							"#admin-table",
 							{
@@ -614,6 +591,5 @@ $(window)
 											}
 										}, ],
 							});
-
 
 				});

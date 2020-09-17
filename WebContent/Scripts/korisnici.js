@@ -62,7 +62,6 @@ $(window)
 
 						return container;
 					}
-
 					// custom max min filter function
 					function minMaxFilterFunction(headerValue, rowValue,
 							rowData, filterParams) {
@@ -71,7 +70,6 @@ $(window)
 						// rowData - the data for the row being filtered
 						// filterParams - params object passed to the
 						// headerFilterFuncParams property
-
 						if (rowValue) {
 							if (headerValue.start != "") {
 								if (headerValue.end != "") {
@@ -86,12 +84,10 @@ $(window)
 								}
 							}
 						}
-
 						return true; // must return a boolean, true if it
 										// passes the
 						// filter.
 					}
-
 					var table = new Tabulator(
 							"#tabela-korisnika",
 							{
@@ -134,7 +130,14 @@ $(window)
 											headerFilterFunc : "=",
 										},
 										{
-											formatter : domacinFormat,
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().uloga == "Korisnik") {
+													return "<label>Promeni</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Konvertuj",
 											hozAlign : "center",
 											cellClick : function(e, cell) {

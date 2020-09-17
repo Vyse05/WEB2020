@@ -54,6 +54,8 @@ $(document).on(
 		function(e) {
 			$("#errorPocetniDatumRezervacije").hide();
 			$("#errorBrojNocenja").hide();
+			$("#errorBrojNocenja2").hide();
+
 			$("#errorSnimljeno").hide();
 			$("#snimljeno").hide();
 			e.preventDefault();
@@ -63,10 +65,13 @@ $(document).on(
 			var brojNocenja = $("#brojNocenja").val();
 			var poruka = $("#poruka").val();
 
+			
 			if (pocetniDatumRezervacije == "") {
 				$("#errorPocetniDatumRezervacije").show();
 			} else if (brojNocenja == "") {
 				$("#errorBrojNocenja").show();
+			} else if (parseInt(brojNocenja) < 1){
+				$("#errorBrojNocenja2").show();
 			} else {
 				$.ajax({
 					type : 'POST',
@@ -84,7 +89,6 @@ $(document).on(
 			}
 
 		});
-var disableDates = [ "9-11-2020", "14-11-2019", "15-11-2019", "18-9-2020", "27-12-2019" ];
 
 function formToJSON(apartmanId, pocetniDatumRezervacije, brojNocenja, poruka) {
 	return JSON.stringify({

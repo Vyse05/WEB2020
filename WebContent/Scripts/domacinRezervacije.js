@@ -41,6 +41,11 @@ $(window)
 							{
 								ajaxURL : "../rezervacija/svi", // ajax
 								// URL
+								initialFilter : [ {
+									field: "canEdit",
+									type: "like",
+									value: "true"
+								} ],
 								height : "311px",
 								pagination : "local",
 								layout : "fitColumns",
@@ -96,7 +101,6 @@ $(window)
 											title : "Odbij Rezervaciju",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-
 												$
 														.ajax({
 															type : 'PUT',
@@ -136,7 +140,6 @@ $(window)
 												$
 														.ajax({
 															type : 'PUT',
-
 															url : "/WebProj/rest/rezervacija/"
 																	+ cell
 																			.getRow()
@@ -151,7 +154,6 @@ $(window)
 																	textStatus,
 																	errorThrown) {
 																alert("Greska pri prihvati");
-
 															}
 														});
 											}

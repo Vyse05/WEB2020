@@ -62,7 +62,11 @@ $(window)
 								height : "311px",
 								ajaxURL : "../"+id+"/komentariAdmin",
 								layout : "fitDataTable",
-
+								initialFilter : [ {
+									field: "canEdit",
+									type: "like",
+									value: "true"
+								} ],
 								columns : [
 										{
 											title : "Komentar",
