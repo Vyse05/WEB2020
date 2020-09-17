@@ -64,7 +64,7 @@ public class ApartmanController {
 	}
 
 	@GET
-	@Path("/komentar")
+	@Path("/komentari/{id}")
 	public void komentarPage() {
 		try {
 			servletRequest.getRequestDispatcher("/WEB-INF/komentari.html").forward(servletRequest, servletResponse);

@@ -2,9 +2,7 @@ $(window)
 		.on(
 				'load',
 				function() {
-				
-					
-					
+
 					var gostId;
 					$.ajax({
 						type : 'GET',
@@ -13,15 +11,15 @@ $(window)
 						success : function(data) {
 							gostID = data.id;
 						},
-						error : function(XMLHttpRequest, textStatus, errorThrown) {
-							//TODO
-							}
-						});
-					
+						error : function(XMLHttpRequest, textStatus,
+								errorThrown) {
+							// TODO
+						}
+					});
+
 					var potvrdiFormat = function(cell, formatterParams,
-							onRendered) { // plain
-						// text
-						// value
+							onRendered) {
+
 						return "<label>Potvrdi</label>";
 					};
 					var otkaziFormat = function(cell, formatterParams,
@@ -34,13 +32,13 @@ $(window)
 
 					var OstaviKomentarFormat = function(cell, formatterParams,
 							onRendered) { // plain
-						if (test == 5){
+						if (test == 5) {
 							return "<label>Oceni</label>";
 
-						}
-						else return "<label></label>";
+						} else
+							return "<label></label>";
 					};
-					
+
 					var table = new Tabulator(
 							"#korisnik-apartman-table",
 							{
@@ -55,7 +53,7 @@ $(window)
 											title : "Id",
 											field : "id",
 										},
-									
+
 										{
 											title : "Lokacija",
 											field : "apartman",
@@ -82,37 +80,68 @@ $(window)
 											field : "poruka",
 										},
 										{
-											formatter : potvrdiFormat,
-											title : "Potvrdi Apartman",
-											hozAlign : "center",
-											cellClick : function(e, cell) {
-												alert("Treba da potvrdi rezervaciju: "
-														+ cell.getRow()
-																.getData().id)
-											}
+											title : "Status",
+											field : "status"
 										},
+
+									
 										{
-											formatter : otkaziFormat,
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().status == "KREIRANA") {
+													return "<label>Otkazi</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Otkazi Apartman",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												alert("Treba da otkaze rezervaciju: "
-														+ cell.getRow()
-																.getData().id)
+											
+												$
+														.ajax({
+															type : 'PUT',
+
+															url : "/WebProj/rest/rezervacija/"
+																	+ cell
+																			.getRow()
+																			.getData().id
+																	+ "/odustani",
+															success : function(
+																	data) {
+																alert("Odustanak uspesan");
+															},
+															error : function(
+																	XMLHttpRequest,
+																	textStatus,
+																	errorThrown) {
+																alert("Greska pri odustajanju20");
+
+															}
+														});
 											}
 										},
 										{
-											formatter : OstaviKomentarFormat,
-											title : "Oceni",
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().status == "ODBIJENA") {
+													return "<label>Komentarisi</label>";
+												} else if (cell.getRow()
+														.getData().status == "ZAVRŠENA") {
+													return "<label>Komentarisi</label>";
+												} else {
+													return "";
+												}
+											},
+											title : "Komentarisi",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												alert("Treba da otkaze rezervaciju: "
+												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/ostaviKomentar/"
 														+ cell.getRow()
-																.getData().id)
-												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/ostaviKomentar/"+ cell.getRow().getData().id;
+																.getData().id;
 											}
-										},
-										],
+										}, ],
+
 							});
-					//table.setFilter("gostId", "=", "gostId");
+					// table.setFilter("gostId", "=", "gostId");
 				});

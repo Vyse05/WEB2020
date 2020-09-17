@@ -115,6 +115,17 @@ public class RezervacijaKontroller {
 		} catch (Exception e1) {
 		}
 	}
+
+	
+	@GET
+	@Path("/domacinRezervacije")
+	public void domacinRezervacije() {
+		try {
+			servletRequest.getRequestDispatcher("/WEB-INF/domacinRezervacije.html").forward(servletRequest,
+					servletResponse);
+		} catch (Exception e1) {
+		}
+	}
 	
 	@GET
 	@Path("/ostaviKomentar/{id}")

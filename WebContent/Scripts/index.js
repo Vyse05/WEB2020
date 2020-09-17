@@ -121,11 +121,90 @@ $(window)
 						// passes the
 						// filter.
 					}
+					
+					var table = new Tabulator(
+							"#neulogovan-table",
+							{
+								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
+								initialFilter:[
+								               {field:"aktivno", type:"like", value:"true"}
+								           ],
+								// URL
+								height : "311px",
+								pagination : "local",
+								layout : "fitColumns",
+								paginationSize : 10,
+								columns : [
+										{
+											title : "Id",
+											field : "id",
+										},
+										{
+											title : "Lokacija",
+											field : "naseljenoMesto",
+											headerFilter : "input"
+										},
+										{
+											title : "Cena",
+											field : "cena",
+											sorter : "number",
+											hozAlign : "center",
+											headerFilter : minMaxFilterEditor,
+											headerFilterFunc : minMaxFilterFunction,
+											headerFilterLiveFilter : false
+										},
+										{
+											title : "Broj Soba",
+											field : "brojSoba",
+											sorter : "number",
+											hozAlign : "center",
+											headerFilter : "number",
+											headerFilterPlaceholder : "at least...",
+											headerFilterFunc : ">="
+										},
+										{
+											title : "Broj Osoba",
+											field : "brojGostiju",
+											sorter : "number",
+											hozAlign : "center",
+											headerFilter : "number",
+											headerFilterPlaceholder : "at least...",
+											headerFilterFunc : ">="
+										},
+										{
+											title : "Datum Dolaska",
+											field : "dob",
+											hozAlign : "center",
+											sorter : "date",
+											headerFilterFunc : ">="
+										},
+										{
+											title : "Datum Odlaska",
+											field : "dob2",
+											hozAlign : "center",
+											sorter : "date",
+											headerFilterFunc : ">="
+										},
+
+										{
+											formatter : komentarFormat,
+											title : "Komentari",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentari/"
+														+ cell.getRow()
+																.getData().id;
+											}
+										}, ],
+							});
 
 					var table = new Tabulator(
 							"#korisnik-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
+								initialFilter:[
+								               {field:"aktivno", type:"like", value:"true"}
+								           ],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -197,9 +276,9 @@ $(window)
 											title : "Komentari",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentar";
-												// + cell.getRow()
-												// .getData().id;
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentari/"
+														+ cell.getRow()
+																.getData().id;
 											}
 										},
 
@@ -209,6 +288,9 @@ $(window)
 							"#domacin-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
+								initialFilter:[
+								               {field:"aktivno", type:"like", value:"true"}
+								           ],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -266,15 +348,16 @@ $(window)
 											headerFilterFunc : ">="
 										},
 										{
-											formatter : rezervacijaFormat,
-											title : "Rezervacija",
+											formatter : komentarFormat,
+											title : "Komentari",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												window.location.href = "http://localhost:8080/WebProj/rest/rezervacija/nov/"
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentari/"
 														+ cell.getRow()
 																.getData().id;
 											}
 										},
+
 										{
 											formatter : izmeniFormat,
 											title : "Izmeni",
@@ -286,6 +369,76 @@ $(window)
 											}
 										}, ],
 							});
+					
+					var table = new Tabulator(
+							"#domacin-table2",
+							{
+								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
+								// URL
+								initialFilter:[
+								               {field:"aktivno", type:"like", value:"false"}
+								           ],
+								height : "311px",
+								pagination : "local",
+								layout : "fitColumns",
+								paginationSize : 10,
+								columns : [
+										{
+											title : "Id",
+											field : "id",
+										},
+										{
+											title : "Lokacija",
+											field : "naseljenoMesto",
+										},
+										{
+											title : "Cena",
+											field : "cena",
+											hozAlign : "center",		
+										},
+										{
+											title : "Broj Soba",
+											field : "brojSoba",
+											hozAlign : "center",
+										},
+										{
+											title : "Broj Osoba",
+											field : "brojGostiju",
+											hozAlign : "center",
+										},
+										{
+											title : "Datum Dolaska",
+											field : "dob",
+											hozAlign : "center",
+										},
+										{
+											title : "Datum Odlaska",
+											field : "dob2",
+											hozAlign : "center",
+										},
+										{
+											formatter : komentarFormat,
+											title : "Komentari",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentari/"
+														+ cell.getRow()
+																.getData().id;
+											}
+										},
+
+										{
+											formatter : izmeniFormat,
+											title : "Izmeni",
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/"
+														+ cell.getRow()
+																.getData().id;
+											}
+										}, ],
+							});
+					
 					var table = new Tabulator(
 							"#admin-table",
 							{
@@ -333,18 +486,19 @@ $(window)
 											headerFilterFunc : ">="
 										},
 										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
+											title : "Aktiviran",
+											field : "aktivno"
 										},
+
 										{
-											title : "Datum Odlaska",
-											field : "dob2",
+											formatter : komentarFormat,
+											title : "Komentari",
 											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
+											cellClick : function(e, cell) {
+												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentari/"
+														+ cell.getRow()
+																.getData().id;
+											}
 										},
 										{
 											formatter : izmeniFormat,
@@ -357,46 +511,30 @@ $(window)
 											},
 
 										},
+
 										{
-											formatter : brisanjeFormat,
-											title : "Brisanje",
-											hozAlign : "center",
-											cellClick : function(e, cell) {
-												$
-												.ajax({
-													type : 'PUT',
-													url : "/WebProj/rest/rezervacija/"
-															+ id
-															+ "/komentar",
-													contentType : 'application/json',
-													
-													success : function() {
-														alert("Uspesno obrisan")
-													},
-													error : function(
-															XMLHttpRequest,
-															textStatus,
-															errorThrown) {
-														if (XMLHttpRequest.status == 403) {
-															alert("Greska pri brisanju")
-														}
-													}
-												});
-											}
-										},
-										{
-											formatter : aktivacijaFormat,
+
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().aktivno == false) {
+													return "<label>Aktiviraj</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Aktivacija",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
 												$
 														.ajax({
 															type : 'PUT',
-															url : "/WebProj/rest/rezervacija/"
-																	+ id
-																	+ "/komentar",
+															url : "/WebProj/rest/apartman/"
+																	+ cell
+																			.getRow()
+																			.getData().id
+																	+ "/aktiviraj",
 															contentType : 'application/json',
-															
+
 															success : function() {
 																alert("Uspesno aktiviran")
 															},
@@ -412,18 +550,27 @@ $(window)
 											}
 										},
 										{
-											formatter : deaktivacijaFormat,
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												if (cell.getRow().getData().aktivno == true) {
+													return "<label>Deaktiviraj</label>";
+												} else {
+													return "";
+												}
+											},
 											title : "Deaktivacija",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
 												$
 														.ajax({
 															type : 'PUT',
-															url : "/WebProj/rest/rezervacija/"
-																	+ id
-																	+ "/komentar",
+															url : "/WebProj/rest/apartman/"
+																	+ cell
+																			.getRow()
+																			.getData().id
+																	+ "/deaktiviraj",
 															contentType : 'application/json',
-															
+
 															success : function() {
 																alert("Uspesno deaktiviran")
 															},
@@ -437,79 +584,36 @@ $(window)
 															}
 														});
 											}
-										}, ],
-							});
-					var table = new Tabulator(
-							"#neulogovan-table",
-							{
-								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
-								// URL
-								height : "311px",
-								pagination : "local",
-								layout : "fitColumns",
-								paginationSize : 10,
-								columns : [
-										{
-											title : "Id",
-											field : "id",
 										},
 										{
-											title : "Lokacija",
-											field : "naseljenoMesto",
-											headerFilter : "input"
-										},
-										{
-											title : "Cena",
-											field : "cena",
-											sorter : "number",
-											hozAlign : "center",
-											headerFilter : minMaxFilterEditor,
-											headerFilterFunc : minMaxFilterFunction,
-											headerFilterLiveFilter : false
-										},
-										{
-											title : "Broj Soba",
-											field : "brojSoba",
-											sorter : "number",
-											hozAlign : "center",
-											headerFilter : "number",
-											headerFilterPlaceholder : "at least...",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Broj Osoba",
-											field : "brojGostiju",
-											sorter : "number",
-											hozAlign : "center",
-											headerFilter : "number",
-											headerFilterPlaceholder : "at least...",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Dolaska",
-											field : "dob",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-										{
-											title : "Datum Odlaska",
-											field : "dob2",
-											hozAlign : "center",
-											sorter : "date",
-											headerFilterFunc : ">="
-										},
-
-										{
-											formatter : komentarFormat,
-											title : "Komentari",
+											formatter : brisanjeFormat,
+											title : "Brisanje",
 											hozAlign : "center",
 											cellClick : function(e, cell) {
-												window.location.href = "http://localhost:8080/WebProj/rest/apartman/komentar";
-												// + cell.getRow()
-												// .getData().id;
+												$
+														.ajax({
+															type : 'DELETE',
+															url : "/WebProj/rest/apartman/"
+																	+ cell
+																			.getRow()
+																			.getData().id,
+															contentType : 'application/json',
+
+															success : function() {
+																alert("Uspesno obrisan")
+															},
+															error : function(
+																	XMLHttpRequest,
+																	textStatus,
+																	errorThrown) {
+																if (XMLHttpRequest.status == 403) {
+																	alert("Greska pri brisanju")
+																}
+															}
+														});
 											}
 										}, ],
 							});
+
 
 				});
