@@ -97,16 +97,23 @@ test {
 		<br>
 		<div id="korisnik-group">
 			<h1>Pretraga Apartmana Korisnik</h1>
-			<div id="forma">
-				<span>Pocetni datum rezervacije</span> <br /> <input type="text"
+			<form id="forma">
+				<span>Pocetni datum rezervacije</span> <br /> 
+				
+				<input type="text"
 					name="date" id="pocetniDatumRezervacije"
-					class="datepicker form-control" autocomplete="off" /> <br> <span>Krajnji
-					datum rezervacije</span> <br /> <input type="text" name="date"
+					class="datepicker form-control" autocomplete="off" /> 
+					<br> <span>Krajnji
+					datum rezervacije</span> <br /> 
+					
+					<input type="text" name="date"
 					id="krajnjiDatumRezervacije" class="datepicker form-control"
-					autocomplete="off" /> <br> <input type="submit" value="OK" />
+					autocomplete="off" /> <br> 
+					
+					<input type="submit" value="Pretrazi" />
 				<br> <span id="errorDatumRezervacije" hidden="true">Nisu
 					dobri podaci za pretragu apartmana.</span><br>
-			</div>
+			</form>
 
 			<div id="korisnik-table"></div>
 		</div>

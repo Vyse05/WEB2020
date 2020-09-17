@@ -1,9 +1,13 @@
+var tableK;
 $(window)
 		.on(
 				'load',
 				function() {
-					
-
+					$('.datepicker').datepicker(
+							{
+								format : 'yyyy-mm-dd',
+								startDate : new Date(),
+							});
 					$.ajax({
 						type : 'GET',
 						url : '/WebProj/rest/korisnik/info',
@@ -216,7 +220,7 @@ $(window)
 										}, ],
 							});
 
-					var table = new Tabulator(
+					 tableK = new Tabulator(
 							"#korisnik-table",
 							{
 								ajaxURL : "../WebProj/rest/apartman/svi", // ajax
@@ -623,31 +627,32 @@ $(window)
 							});
 
 				});
-
 $(document).on(
 		'submit',
 		'#forma',
 		function(e) {
 			$("#errorDatumRezervacije").hide();
+			e.preventDefault();
+
 			
 			var pocetniDatumRezervacije = $("#pocetniDatumRezervacije").val();
-			var pocetniDatumRezervacije = $("#krajnjiDatumRezervacije").val();
+			var endDatumRezervacije = $("#krajnjiDatumRezervacije").val();
 
 
-			if (pocetniDatumRezervacije == "" && krajnjiDatumRezervacije != "") {
+			if (pocetniDatumRezervacije == "" && endDatumRezervacije != "") {
 				$("#errorDatumRezervacije").show();
-			} else if (pocetniDatumRezervacije != "" && krajnjiDatumRezervacije == "") {
+			} else if (pocetniDatumRezervacije != "" && endDatumRezervacije == "") {
 				$("#errorDatumRezervacije").show();
-			} else if (pocetniDatumRezervacije == "" && krajnjiDatumRezervacije == "") {
+			} else if (pocetniDatumRezervacije == "" && endDatumRezervacije == "") {
 				$("#errorDatumRezervacije").show();
 			} else {
 				$.ajax({
 					type : 'POST',
-					url : "/WebProj/rest/rezervacija/nov",
+					url : "/WebProj/rest/apartman/dostupni",
 					contentType : 'application/json',
-					data : formToJSON(apartmanId, pocetniDatumRezervacije,
-							brojNocenja, poruka),
-					success : function() {
+					data : formToJSON(pocetniDatumRezervacije,endDatumRezervacije),
+					success : function(data) {
+						tableK.replaceData(data);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 					}
@@ -655,9 +660,9 @@ $(document).on(
 			}
 		});
 
-function formToJSON(apartmanId, pocetniDatumRezervacije, krajnjiDatumRezervacije) {
+function formToJSON(pocetniDatumRezervacije, endDatumRezervacije) {
 	return JSON.stringify({
-		"pocetniDatumRezervacije" : pocetniDatumRezervacije,
-		"krajnjiDatumRezervacije" : krajnjiDatumRezervacije,
+		"startDate" : pocetniDatumRezervacije,
+		"endDate" : endDatumRezervacije,
 	});
 }
