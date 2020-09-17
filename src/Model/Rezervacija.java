@@ -57,8 +57,10 @@ public class Rezervacija extends Removable {
 
 	@Override
 	public String toString() {
+		String porukaTemp = poruka!=null && poruka.trim().length() == 0 ? null : poruka;
+		String komentarTemp = komentar!=null && komentar.trim().length() == 0 ? null : komentar;
 		return getRemoved() + ";" + apartmanId + ";" + pocetniDatumRezervacije.getTime() + ";" + brojNocenja + ";"
-				+ ukupnaCena + ";" + poruka + ";" + gostId + ";" + status + ";" + komentar + ";" + ocena + ";"
+				+ ukupnaCena + ";" + porukaTemp + ";" + gostId + ";" + status + ";" + komentarTemp + ";" + ocena + ";"
 				+ prikazatiKomentar;
 	}
 
