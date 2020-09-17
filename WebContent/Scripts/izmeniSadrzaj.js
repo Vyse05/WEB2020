@@ -1,10 +1,11 @@
-$(window).on('load', function(){
-	var url = window.location.pathname;
+var url = window.location.pathname;
 	var id = url.substring(url.lastIndexOf('/') + 1);
+$(window).on('load', function(){
+	
 	$("#canEdit").val(true);
 	$.ajax({
 		type : 'GET',
-		url : '/WebProj/rest/sadrzaj/id',
+		url : '/WebProj/rest/sadrzaj/'+id,
 		dataType : "json",
 		success : function(data) {
 				$("#naziv").val(data.naziv);
@@ -30,7 +31,7 @@ $(document).on('submit','#forma',function(e){
 	} else {
 		$.ajax({
 			type : 'PUT',
-			url : "/WebProj/rest/sadrzaj/"+id,
+			url : '/WebProj/rest/sadrzaj/'+id,
 			contentType : 'application/json',
 			data : formToJSON(naziv),
 			success : function() {

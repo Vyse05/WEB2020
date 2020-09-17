@@ -3,33 +3,36 @@ $(window)
 				'load',
 				function() {
 					
+
 					$.ajax({
 						type : 'GET',
 						url : '/WebProj/rest/korisnik/info',
 						dataType : "json",
 						success : function(data) {
-							if(data.uloga == 'Administrator'){
-								$("#neulogovan-group").prop( "hidden", true );
-								$("#korisnik-group").prop( "hidden", true );
-								$("#domacin-group").prop( "hidden", true );
-							}else if(data.uloga = "Korisnik"){
-								$("#neulogovan-group").prop( "hidden", true );
-								$("#domacin-group").prop( "hidden", true );
-								$("#admin-group").prop( "hidden", true );
-							}else if(data.uloga = "Domaćin"){
-								$("#neulogovan-group").prop( "hidden", true );
-								$("#korisnik-group").prop( "hidden", true );
-								$("#admin-group").prop( "hidden", true );
-							}else if(data.uloga = ""){
-								$("#domacin-group").prop( "hidden", true );
-								$("#korisnik-group").prop( "hidden", true );
-								$("#admin-group").prop( "hidden", true );
+							if (data.uloga == 'Administrator') {
+								$("#neulogovan-group").prop("hidden", true);
+								$("#korisnik-group").prop("hidden", true);
+								$("#domacin-group").prop("hidden", true);
+							} else if (data.uloga == "Korisnik") {
+								$("#neulogovan-group").prop("hidden", true);
+								$("#domacin-group").prop("hidden", true);
+								$("#admin-group").prop("hidden", true);
+
+							} else if (data.uloga == "Domaćin") {
+								$("#neulogovan-group").prop("hidden", true);
+								$("#korisnik-group").prop("hidden", true);
+								$("#admin-group").prop("hidden", true);
 							}
 						},
-						error : function(XMLHttpRequest, textStatus, errorThrown) {
-							//TODO
-							}
-						});
+						error : function(XMLHttpRequest, textStatus,
+								errorThrown) {
+							$("#domacin-group").prop("hidden", true);
+							$("#korisnik-group").prop("hidden", true);
+							$("#admin-group").prop("hidden", true);
+							// TODO
+						}
+						
+					});
 
 					var rezervacijaFormat = function(cell, formatterParams,
 							onRendered) { // plain
@@ -221,8 +224,7 @@ $(window)
 									field : "aktivno",
 									type : "like",
 									value : "true"
-								},
-								],
+								}, ],
 								// URL
 								height : "311px",
 								pagination : "local",
@@ -296,10 +298,10 @@ $(window)
 									field : "aktivno",
 									type : "like",
 									value : "true"
-								},{
-									field: "canEdit",
-									type: "like",
-									value: "true"
+								}, {
+									field : "canEdit",
+									type : "like",
+									value : "true"
 								} ],
 								// URL
 								height : "311px",
@@ -382,10 +384,10 @@ $(window)
 									field : "aktivno",
 									type : "like",
 									value : "false"
-								},{
-									field: "canEdit",
-									type: "like",
-									value: "true"
+								}, {
+									field : "canEdit",
+									type : "like",
+									value : "true"
 								} ],
 								height : "311px",
 								pagination : "local",
@@ -621,3 +623,41 @@ $(window)
 							});
 
 				});
+
+$(document).on(
+		'submit',
+		'#forma',
+		function(e) {
+			$("#errorDatumRezervacije").hide();
+			
+			var pocetniDatumRezervacije = $("#pocetniDatumRezervacije").val();
+			var pocetniDatumRezervacije = $("#krajnjiDatumRezervacije").val();
+
+
+			if (pocetniDatumRezervacije == "" && krajnjiDatumRezervacije != "") {
+				$("#errorDatumRezervacije").show();
+			} else if (pocetniDatumRezervacije != "" && krajnjiDatumRezervacije == "") {
+				$("#errorDatumRezervacije").show();
+			} else if (pocetniDatumRezervacije == "" && krajnjiDatumRezervacije == "") {
+				$("#errorDatumRezervacije").show();
+			} else {
+				$.ajax({
+					type : 'POST',
+					url : "/WebProj/rest/rezervacija/nov",
+					contentType : 'application/json',
+					data : formToJSON(apartmanId, pocetniDatumRezervacije,
+							brojNocenja, poruka),
+					success : function() {
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+					}
+				});
+			}
+		});
+
+function formToJSON(apartmanId, pocetniDatumRezervacije, krajnjiDatumRezervacije) {
+	return JSON.stringify({
+		"pocetniDatumRezervacije" : pocetniDatumRezervacije,
+		"krajnjiDatumRezervacije" : krajnjiDatumRezervacije,
+	});
+}

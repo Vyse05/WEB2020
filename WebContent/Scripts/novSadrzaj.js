@@ -32,55 +32,73 @@ function formToJSON(naziv) {
 	});
 }
 
-$(window).on(
-		'load',
-		function() {
-			var table = new Tabulator("#example-table", {
+$(window)
+		.on(
+				'load',
+				function() {
+					var table = new Tabulator(
+							"#example-table",
+							{
 
-				height : "311px",
-				ajaxURL : "../sadrzaj/svi",
-				layout : "fitDataTable",
+								height : "311px",
+								ajaxURL : "../sadrzaj/svi",
+								layout : "fitDataTable",
 
-				columns : [
-						{
-							title : "ID",
-							field : "id",
-						},
-						{
-							title : "Naziv",
-							field : "naziv",
-						},
-						{
-							title : "Izmeni Sadrzaj",
-							formatter : function(cell, formatterParams,
-									onRendered) {
-								return "<label>Izmeni</label>";
-							},
-							hozAlign : "center",
-							cellClick : function(e, cell) {
-								window.location.href = "/WebProj/rest/sadrzaj/"
-										+ cell.getRow().getData().id
-										+ "/izmeni";
-							}
+								columns : [
+										{
+											title : "ID",
+											field : "id",
+										},
+										{
+											title : "Naziv",
+											field : "naziv",
+										},
+										{
+											title : "Izmeni Sadrzaj",
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												return "<label>Izmeni</label>";
+											},
+											hozAlign : "center",
+											cellClick : function(e, cell) {
+												window.location.href = "/WebProj/rest/sadrzaj/izmeni/"
+														+ cell.getRow()
+																.getData().id;
+											}
 
-						},
-						{
-							formatter : function(cell, formatterParams,
-									onRendered) {
-								if (cell.getRow().getData().obrisan == false) {
-									return "<label>Obrisi</label>";
-								} else {
-									return "";
-								}
-							},
-							title : "Obrisi Sadrzaj",
-							hozAlign : "center",
-							cellClick : function(e, cell) {
-								window.location.href = "/WebProj/rest/sadrzaj/"
-										+ cell.getRow().getData().id
-										+ "/izmeni";
-							}
-						}, ],
-			});
+										},
+										{
+											formatter : function(cell,
+													formatterParams, onRendered) {
+												return "<label>Obrisi</label>";
+											},
+											title : "Obrisi Sadrzaj",
+											hozAlign : "center",
 
-		});
+											cellClick : function(e, cell) {
+												$
+														.ajax({
+															type : 'DELETE',
+															url : "/WebProj/rest/sadrzaj/"
+																	+ cell
+																			.getRow()
+																			.getData().id,
+															contentType : 'application/json',
+
+															success : function() {
+																alert("Uspesno obrisan")
+															},
+															error : function(
+																	XMLHttpRequest,
+																	textStatus,
+																	errorThrown) {
+																if (XMLHttpRequest.status == 403) {
+																	alert("Greska pri brisanju")
+																}
+															}
+														});
+											}
+										}, ],
+							});
+
+				});

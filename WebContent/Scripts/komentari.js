@@ -13,14 +13,16 @@ $(window)
 						success : function(data) {
 							if (data.uloga == 'Administrator') {
 								$("#korisnik-group").prop("hidden", true);
-							} else if (data.uloga = "Korisnik") {
+							} else if (data.uloga == "Korisnik") {
 								$("#domacin-group").prop("hidden", true);
-							} else if (data.uloga = "Domaćin") {
+							} else if (data.uloga == "Domaćin") {
 								$("#korisnik-group").prop("hidden", true);
 							}
 						},
 						error : function(XMLHttpRequest, textStatus,
 								errorThrown) {
+							$("#domacin-group").prop("hidden", true);
+
 							// TODO
 						}
 					});
